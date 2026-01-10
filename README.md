@@ -31,6 +31,8 @@ If may further questions po kayo about the system you can contact us the creator
 Marc Angelo Canillas 
 Ralph Mathew Cawilan
 John Carlo Marasigan 
+Paul Anthony Pancho
+Mark Vincent Plaza
 
 we are from BSIT 3-2 po. 
 
