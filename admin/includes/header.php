@@ -20,6 +20,7 @@ $navItems = [
     'users' => ['label' => 'Users', 'href' => 'users.php', 'icon' => 'bi-people'],
     'admins' => ['label' => 'Admins', 'href' => 'manage_admins.php', 'icon' => 'bi-shield-lock'],
     'sms' => ['label' => 'SMS Dashboard', 'href' => 'sms_dashboard.php', 'icon' => 'bi-chat-dots'],
+    'email' => ['label' => 'Email Dashboard', 'href' => 'email_dashboard.php', 'icon' => 'bi-envelope'],
     'about' => ['label' => 'About Us', 'href' => 'about_us.php', 'icon' => 'bi-info-circle'],
     'payments' => ['label' => 'Payment Settings', 'href' => 'payment_settings.php', 'icon' => 'bi-credit-card'],
 ];
