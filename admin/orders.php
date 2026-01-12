@@ -3,6 +3,8 @@ session_start();
 require_once '../config/database.php';
 require_once '../config/currency.php';
 require_once '../includes/sms_helper.php';
+require_once '../email/vendor/autoload.php';
+require_once '../email/config/email.php';
 
 // Check if admin is logged in
 if(!isset($_SESSION['admin_id'])) {
@@ -28,6 +30,16 @@ if(isset($_POST['update_status']) && isset($_POST['order_id']) && isset($_POST['
     // Update order status
     $stmt = $conn->prepare("UPDATE orders SET status = ? WHERE id = ?");
     $stmt->execute([$new_status, $order_id]);
+    
+    // Send EMAIL notification
+    if ($order && !empty($order['email'])) {
+        $orderData = [
+            'order_id' => $order['id'],
+            'customer_name' => trim(($order['first_name'] ?? '') . ' ' . ($order['last_name'] ?? '')) ?: $order['username'],
+            'status' => $new_status
+        ];
+        sendOrderStatusUpdateEmail($order['email'], $orderData);
+    }
     
     // Send SMS notification based on status (only if valid phone number)
     $phone = $order['phone'] ?? '';
