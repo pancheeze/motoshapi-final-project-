@@ -187,8 +187,7 @@ CREATE TABLE `payment_modes` (
 
 INSERT INTO `payment_modes` (`id`, `mode_name`, `mode_code`, `is_active`, `created_at`) VALUES
 (1, 'Cash on Delivery (COD)', 'cod', 1, '2025-06-18 14:51:27'),
-(2, 'GCash', 'gcash', 1, '2025-06-18 14:51:27'),
-(3, 'PayMaya', 'paymaya', 1, '2025-06-18 14:51:27');
+(2, 'PayPal', 'paypal', 1, '2025-06-18 14:51:27');
 
 
 -- --------------------------------------------------------
