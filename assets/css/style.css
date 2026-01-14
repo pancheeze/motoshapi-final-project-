@@ -27,10 +27,7 @@ body {
     padding-bottom: 1rem;
 }
 
-.product-card:hover {
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
-    transform: translateY(-5px) scale(1.02);
-}
+
 
 .product-card .card-img-top {
     height: 400px;
@@ -40,9 +37,7 @@ body {
     transition: transform 0.3s ease;
 }
 
-.product-card:hover .card-img-top {
-    transform: scale(1.05);
-}
+
 
 /* Admin Dashboard Stats */
 .stat-card {
@@ -50,9 +45,7 @@ body {
     transition: transform 0.2s;
 }
 
-.stat-card:hover {
-    transform: translateY(-5px);
-}
+
 
 /* Navigation */
 .navbar {
@@ -233,9 +226,7 @@ html, body {
     transition: transform 0.3s ease;
 }
 
-.product-card:hover .product-img-fit {
-    transform: scale(1.05);
-}
+
 
 .product-card .card-body {
     flex: 1 1 auto;
@@ -319,12 +310,6 @@ html, body {
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
     filter: invert(0);
-    /* Black arrow in light mode */
-}
-
-body.dark-mode .carousel-control-prev-icon,
-body.dark-mode .carousel-control-next-icon {
-    filter: invert(1);
 }
 
 .featured-products-container {
@@ -354,10 +339,7 @@ body.dark-mode .carousel-control-next-icon {
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
-#featuredCarousel .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-}
+
 
 #featuredCarousel .product-info {
     position: absolute;
@@ -419,10 +401,7 @@ body.dark-mode .carousel-control-next-icon {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.featured-products-section .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-}
+
 
 .featured-products-section .card-footer {
     background-color: transparent;
@@ -452,10 +431,7 @@ body.dark-mode .carousel-control-next-icon {
     min-height: auto;
 }
 
-#featuredCarousel .product-card:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    transform: translateY(-5px);
-}
+
 
 #featuredCarousel .card-title a {
     color: #fff !important;
@@ -489,9 +465,7 @@ body.dark-mode .carousel-control-next-icon {
     transition: opacity 0.3s ease;
 }
 
-.product-card-v2:hover .product-image {
-    opacity: 0.8;
-}
+
 
 .product-card-v2 .sold-out-badge {
     position: absolute;

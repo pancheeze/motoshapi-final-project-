@@ -1,5 +1,7 @@
 <?php
 session_start();
+require_once 'config/database.php';
+require_once 'config/currency.php';
 
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error'] = 'You must be logged in.';
@@ -19,10 +21,10 @@ include 'includes/header.php';
         </div>
         <h1 style="font-size: 2rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--spacing-md);">Payment Successful!</h1>
         <p style="font-size: 1.125rem; color: var(--text-secondary); margin-bottom: var(--spacing-sm);">Thank you for your PayPal payment.</p>
-        <?php if ($order_id > 0): ?>
-            <p style="font-size: 1rem; color: var(--text-secondary); margin-bottom: var(--spacing-xl);">Order Number: <span style="color: var(--accent-primary); font-weight: 600; font-size: 1.25rem;">#<?php echo $order_id; ?></span></p>
-        <?php endif; ?>
-        <div style="background: var(--bg-primary); border: 1px solid var(--border-primary); padding: var(--spacing-lg); border-radius: var(--radius-md); margin-bottom: var(--spacing-xl);">
+        <div style="background: var(--bg-primary); border: 2px solid #28a745; padding: var(--spacing-lg); border-radius: var(--radius-md); margin-bottom: var(--spacing-xl);">
+            <?php if ($order_id > 0): ?>
+                <p style="font-size: 1.125rem; color: var(--text-primary); margin-bottom: var(--spacing-md); font-weight: 600;">Order Number: <span style="color: #28a745; font-weight: 700; font-size: 1.5rem;">#<?php echo $order_id; ?></span></p>
+            <?php endif; ?>
             <p style="color: var(--text-secondary); margin: 0; line-height: 1.6;">We will process your order shortly. You can track your order status from your account.</p>
         </div>
         <div style="display: flex; gap: var(--spacing-md); justify-content: center;">

@@ -42,16 +42,16 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
     <div class="modern-container modern-section">
-        <h2 class="modern-section-title">All <span class="modern-accent-text">Products</span></h2>
+        <h2 class="modern-section-title">All Products</h2>
         
         <!-- Active Filter Display -->
         <?php if($category_id > 0 || $search !== ''): ?>
-            <div style="background: var(--bg-secondary); border: 1px solid var(--border-primary); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-lg); display: flex; align-items: center; justify-content: space-between;">
-                <div style="color: var(--text-secondary);">
-                    <i class="bi bi-funnel-fill" style="color: var(--accent-primary); margin-right: 0.5rem;"></i>
+            <div class="sp-filterbar">
+                <div class="sp-filterbar-left">
+                    <i class="bi bi-funnel-fill sp-filterbar-icon"></i>
                     <strong>Active Filters:</strong>
                     <?php if($search !== ''): ?>
-                        <span style="display: inline-block; background: var(--accent-primary); color: #fff; padding: 0.25rem 0.75rem; border-radius: var(--radius-md); margin-left: 0.5rem; font-size: 0.875rem;">Search: "<?php echo htmlspecialchars($search); ?>"</span>
+                        <span class="sp-chip">Search: "<?php echo htmlspecialchars($search); ?>"</span>
                     <?php endif; ?>
                     <?php if($category_id > 0): ?>
                         <?php 
@@ -60,20 +60,20 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         });
                         $selected_cat_name = !empty($selected_cat) ? reset($selected_cat)['name'] : 'Unknown';
                         ?>
-                        <span style="display: inline-block; background: var(--accent-primary); color: #fff; padding: 0.25rem 0.75rem; border-radius: var(--radius-md); margin-left: 0.5rem; font-size: 0.875rem;">Category: <?php echo htmlspecialchars($selected_cat_name); ?></span>
+                        <span class="sp-chip">Category: <?php echo htmlspecialchars($selected_cat_name); ?></span>
                     <?php endif; ?>
                 </div>
-                <a href="products.php" class="modern-btn modern-btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">Clear Filters</a>
+                <a href="products.php" class="modern-btn modern-btn-secondary sp-btn-sm">Clear Filters</a>
             </div>
         <?php endif; ?>
         
         <!-- Search & Filter -->
-        <form class="row g-3 mb-4" method="get" action="products.php" style="max-width: 900px; margin: 0 auto var(--spacing-xl);">
+        <form class="row g-3 mb-4 sp-filter-form" method="get" action="products.php">
             <div class="col-md-5">
-                <input type="text" class="form-control" name="search" placeholder="Search products..." value="<?php echo htmlspecialchars($search); ?>" style="background: var(--bg-secondary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md);">
+                <input type="text" class="form-control sp-input" name="search" placeholder="Search products..." value="<?php echo htmlspecialchars($search); ?>">
             </div>
             <div class="col-md-4">
-                <select class="form-select" name="category_id" id="categoryFilter" style="background: var(--bg-secondary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md);">
+                <select class="form-select sp-input" name="category_id" id="categoryFilter">
                     <option value="">All Categories</option>
                     <?php foreach($categories as $cat): ?>
                         <option value="<?php echo $cat['id']; ?>" <?php if($category_id == $cat['id']) echo 'selected'; ?>><?php echo htmlspecialchars($cat['name']); ?></option>
@@ -81,7 +81,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </select>
             </div>
             <div class="col-md-3">
-                <button type="submit" class="modern-btn modern-btn-primary" style="width: 100%; padding: 0.75rem;"><i class="bi bi-funnel me-2"></i>Filter</button>
+                <button type="submit" class="modern-btn modern-btn-primary sp-btn-block"><i class="bi bi-funnel me-2"></i>Filter</button>
             </div>
         </form>
         
@@ -113,10 +113,10 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </p>
                             <a href="product.php?id=<?php echo $product['id']; ?>" class="modern-btn modern-btn-secondary" style="width: 100%; margin-bottom: var(--spacing-sm);">View Details</a>
                             <?php if($product['stock'] > 0): ?>
-                            <form method="POST" action="cart.php" class="d-flex gap-2">
+                            <form class="add-to-cart-form d-flex gap-2" data-product-id="<?php echo $product['id']; ?>" data-product-name="<?php echo htmlspecialchars($product['name']); ?>">
                                 <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
                                 <input type="number" name="quantity" value="1" min="1" max="<?php echo $product['stock']; ?>" class="form-control" style="width: 70px; background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); border-radius: var(--radius-md); padding: 0.5rem;">
-                                <button type="submit" name="add_to_cart" class="modern-btn modern-btn-primary" style="flex: 1;"><i class="bi bi-cart-plus"></i></button>
+                                <button type="submit" class="modern-btn modern-btn-primary" style="flex: 1;"><i class="bi bi-cart-plus"></i></button>
                             </form>
                             <?php endif; ?>
                         </div>
@@ -124,6 +124,17 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
+    </div>
+
+    <!-- Cart Notification Popup -->
+    <div id="cartNotification" class="cart-notification">
+        <div class="cart-notification-content">
+            <i class="bi bi-check-circle-fill" style="font-size: 1.5rem; color: var(--success);"></i>
+            <div class="cart-notification-text">
+                <strong id="cartNotificationTitle">Added to Cart!</strong>
+                <p id="cartNotificationMessage">Product added successfully</p>
+            </div>
+        </div>
     </div>
 
     <!-- About Us Modal -->
@@ -135,21 +146,23 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <div class="row justify-content-center gx-5">
+                        <div class="row justify-content-center g-4">
               <?php
               $about_stmt = $conn->query("SELECT * FROM about_us ORDER BY id ASC");
               while($member = $about_stmt->fetch(PDO::FETCH_ASSOC)):
               ?>
-              <div class="col-md-4 col-lg-3 mb-4 d-flex justify-content-center">
-                <div class="card h-100 text-center shadow-sm" style="min-width:280px; padding:25px; margin: 0 15px; border-radius: 15px;">
+                            <div class="col-12 col-sm-6 col-lg-4 col-xl-3 d-flex">
+                                <div class="card sp-team-card w-100 h-100 text-center shadow-sm">
                   <?php if($member['photo_url']): ?>
-                    <img src="<?php echo htmlspecialchars($member['photo_url']); ?>" class="card-img-top mx-auto d-block rounded-circle shadow-sm" alt="<?php echo htmlspecialchars($member['name']); ?>" style="width:200px; height:200px; object-fit:cover; margin-bottom:20px;">
+                                        <img src="<?php echo htmlspecialchars($member['photo_url']); ?>" class="sp-team-avatar mx-auto d-block rounded-circle shadow-sm" alt="<?php echo htmlspecialchars($member['name']); ?>">
                   <?php else: ?>
-                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center mx-auto rounded-circle" style="width:200px; height:200px; margin-bottom:20px;">No Photo</div>
+                                        <div class="sp-team-avatar sp-team-avatar--empty bg-secondary text-white d-flex align-items-center justify-content-center mx-auto rounded-circle">No Photo</div>
                   <?php endif; ?>
                   <div class="card-body px-3">
                     <h4 class="card-title fw-bold mb-3"><?php echo htmlspecialchars($member['name']); ?></h4>
-                    <p class="card-text text-muted mb-2" style="font-size: 0.95rem; line-height: 1.6;"><?php echo htmlspecialchars($member['description']); ?></p>
+                                        <?php if (!empty($member['description'])): ?>
+                                            <div class="sp-team-role"><?php echo htmlspecialchars($member['description']); ?></div>
+                                        <?php endif; ?>
                   </div>
                 </div>
               </div>
@@ -160,8 +173,156 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </div>
 
+    <style>
+        .cart-notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--success);
+            border-radius: var(--radius-lg);
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateX(400px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: none;
+            max-width: 350px;
+        }
+
+        .cart-notification.show {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+
+        .cart-notification-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .cart-notification-text {
+            flex: 1;
+        }
+
+        .cart-notification-text strong {
+            display: block;
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .cart-notification-text p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .cart-notification.error {
+            border-color: var(--danger);
+        }
+
+        .cart-notification.error .bi-check-circle-fill {
+            color: var(--danger);
+        }
+
+        .cart-notification.error .bi-check-circle-fill::before {
+            content: "\f623"; /* bi-x-circle-fill */
+        }
+
+        @keyframes cartBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .cart-bounce {
+            animation: cartBounce 0.3s ease-in-out;
+        }
+    </style>
+
     <script>
+      // AJAX Add to Cart functionality
       document.addEventListener('DOMContentLoaded', function() {
+        const cartForms = document.querySelectorAll('.add-to-cart-form');
+        const cartNotification = document.getElementById('cartNotification');
+        const cartNotificationTitle = document.getElementById('cartNotificationTitle');
+        const cartNotificationMessage = document.getElementById('cartNotificationMessage');
+        const cartCountElement = document.getElementById('cart-count-badge');
+
+        cartForms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(form);
+                const productName = form.dataset.productName;
+                const submitButton = form.querySelector('button[type="submit"]');
+                const originalContent = submitButton.innerHTML;
+
+                // Disable button and show loading
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+
+                fetch('ajax_add_to_cart.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Re-enable button
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalContent;
+
+                    if (data.success) {
+                        // Update cart count with animation
+                        if (cartCountElement) {
+                            cartCountElement.textContent = data.cart_count;
+                            cartCountElement.style.display = data.cart_count > 0 ? '' : 'none';
+                            cartCountElement.classList.add('cart-bounce');
+                            setTimeout(() => {
+                                cartCountElement.classList.remove('cart-bounce');
+                            }, 300);
+                        }
+
+                        // Show success notification
+                        cartNotification.classList.remove('error');
+                        cartNotificationTitle.textContent = 'Added to Cart!';
+                        cartNotificationMessage.textContent = productName;
+                        showNotification();
+                    } else {
+                        // Show error notification
+                        cartNotification.classList.add('error');
+                        cartNotificationTitle.textContent = 'Error';
+                        cartNotificationMessage.textContent = data.message || 'Failed to add to cart';
+                        showNotification();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalContent;
+                    
+                    // Show error notification
+                    cartNotification.classList.add('error');
+                    cartNotificationTitle.textContent = 'Error';
+                    cartNotificationMessage.textContent = 'Something went wrong';
+                    showNotification();
+                });
+            });
+        });
+
+        function showNotification() {
+            cartNotification.classList.add('show');
+            setTimeout(() => {
+                cartNotification.classList.remove('show');
+                setTimeout(() => {
+                    cartNotification.classList.remove('error');
+                }, 400);
+            }, 3000);
+        }
+
+        // About Us Modal
         var aboutUsBtn = document.getElementById('aboutUsBtn');
         var aboutUsModal = new bootstrap.Modal(document.getElementById('aboutUsModal'));
         if (aboutUsBtn) {

@@ -4,6 +4,14 @@
  * All-in-one interface for SMS testing, monitoring, and management
  */
 
+session_start();
+
+// Check authentication - allow both admin and regular users
+if (!isset($_SESSION['admin_id']) && !isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 

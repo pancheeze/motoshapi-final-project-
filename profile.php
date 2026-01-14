@@ -1,4 +1,8 @@
 <?php
+session_start();
+require_once 'config/database.php';
+require_once 'config/currency.php';
+
 $title = 'Profile - Motoshapi';
 include 'includes/header.php';
 
@@ -23,14 +27,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     $phone = isset($_POST['phone']) ? trim($_POST['phone']) : null;
     
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        try {
-            $stmt = $conn->prepare('UPDATE users SET email = ?, phone = ? WHERE id = ?');
-            $stmt->execute([$email, $phone, $user_id]);
-            $success = 'Profile updated successfully!';
-            $user['email'] = $email;
-            $user['phone'] = $phone;
-        } catch (PDOException $e) {
-            $error = 'Error updating profile. Please try again.';
+        // Check if email is already used by another user
+        $check_stmt = $conn->prepare('SELECT id FROM users WHERE email = ? AND id != ?');
+        $check_stmt->execute([$email, $user_id]);
+        if ($check_stmt->fetch()) {
+            $error = 'This email address is already in use by another account.';
+        } else {
+            try {
+                $stmt = $conn->prepare('UPDATE users SET email = ?, phone = ? WHERE id = ?');
+                $stmt->execute([$email, $phone, $user_id]);
+                $success = 'Profile updated successfully!';
+                $user['email'] = $email;
+                $user['phone'] = $phone;
+            } catch (PDOException $e) {
+                $error = 'Error updating profile. Please try again.';
+            }
         }
     } else {
         $error = 'Please enter a valid email address.';
@@ -61,15 +72,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                         </div>
                         <div style="margin-bottom: var(--spacing-lg);">
                             <label for="email" class="form-label" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
+                            <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required style="background: var(--bg-primary); border: 2px solid #000; color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
                         </div>
                         <div style="margin-bottom: var(--spacing-lg);">
                             <label for="phone" class="form-label" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">Phone Number <span style="color: var(--text-muted); font-size: 0.875rem;">(Optional)</span></label>
-                            <input type="tel" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($user['phone'] ?? ''); ?>" placeholder="+63 912 345 6789" style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
-                        </div>
-                        <div style="margin-bottom: var(--spacing-xl);">
-                            <label class="form-label" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">Member Since</label>
-                            <input type="text" class="form-control" value="<?php echo date('F j, Y', strtotime($user['created_at'])); ?>" readonly style="background: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-muted); padding: 0.75rem; border-radius: var(--radius-md); width: 100%; cursor: not-allowed;">
+                            <input type="tel" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($user['phone'] ?? ''); ?>" placeholder="+63 912 345 6789" style="background: var(--bg-primary); border: 2px solid #000; color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
                         </div>
                         <div class="d-flex justify-content-between align-items-center" style="gap: var(--spacing-md);">
                             <button type="submit" name="update_profile" class="modern-btn modern-btn-primary">Update Profile</button>
@@ -80,4 +87,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
             </div>
         </div>
     </div>
+
+<style>
+    .form-control.is-valid {
+        border: 2px solid #28a745 !important;
+    }
+    
+    .form-control.is-invalid {
+        border: 2px solid #dc3545 !important;
+    }
+    
+    .form-control {
+        border: 2px solid #000 !important;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        
+        // Email validation
+        emailInput.addEventListener('input', function() {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (emailInput.value.trim() === '') {
+                emailInput.classList.remove('is-valid', 'is-invalid');
+            } else if (emailPattern.test(emailInput.value)) {
+                emailInput.classList.remove('is-invalid');
+                emailInput.classList.add('is-valid');
+            } else {
+                emailInput.classList.remove('is-valid');
+                emailInput.classList.add('is-invalid');
+            }
+        });
+        
+        // Phone validation (optional field)
+        phoneInput.addEventListener('input', function() {
+            // Philippine phone format: +63 followed by 10 digits, or 09xx format
+            const phonePattern = /^(\+63|0)?[0-9]{10,11}$/;
+            const phoneValue = phoneInput.value.replace(/\s+/g, ''); // Remove spaces
+            
+            if (phoneInput.value.trim() === '') {
+                // Optional field - remove validation classes if empty
+                phoneInput.classList.remove('is-valid', 'is-invalid');
+            } else if (phonePattern.test(phoneValue)) {
+                phoneInput.classList.remove('is-invalid');
+                phoneInput.classList.add('is-valid');
+            } else {
+                phoneInput.classList.remove('is-valid');
+                phoneInput.classList.add('is-invalid');
+            }
+        });
+    });
+</script>
+
 <?php include 'includes/footer.php'; ?> 

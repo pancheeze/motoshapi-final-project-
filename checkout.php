@@ -139,6 +139,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
         $stmt = $conn->prepare('INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)');
         foreach ($checkout_items as $item) {
             $stmt->execute([$order_id, $item['id'], $item['quantity'], $item['price']]);
+            
+            // Update stock in real-time
+            if ($buy_now && isset($variation_id) && $variation_id) {
+                // Update variation stock for buy now
+                $stock_stmt = $conn->prepare('UPDATE variations SET stock = GREATEST(0, stock - ?) WHERE id = ?');
+                $stock_stmt->execute([$item['quantity'], $variation_id]);
+            } elseif (!empty($item['variation_id'])) {
+                // Update variation stock for cart items
+                $stock_stmt = $conn->prepare('UPDATE variations SET stock = GREATEST(0, stock - ?) WHERE id = ?');
+                $stock_stmt->execute([$item['quantity'], $item['variation_id']]);
+            } else {
+                // Update regular product stock
+                $stock_stmt = $conn->prepare('UPDATE products SET stock = GREATEST(0, stock - ?) WHERE id = ?');
+                $stock_stmt->execute([$item['quantity'], $item['id']]);
+            }
         }
 
         // Insert shipping information
@@ -265,9 +280,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
                     <i class="bi bi-check-lg" style="font-size: 3rem; color: #fff;"></i>
                 </div>
                 <h1 style="font-size: 2rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--spacing-md);">Order Placed Successfully!</h1>
-                <p style="font-size: 1.125rem; color: var(--text-secondary); margin-bottom: var(--spacing-sm);">Thank you for your order.</p>
-                <p style="font-size: 1rem; color: var(--text-secondary); margin-bottom: var(--spacing-xl);">Order Number: <span style="color: var(--accent-primary); font-weight: 600; font-size: 1.25rem;">#<?php echo $order_id; ?></span></p>
-                <div style="background: var(--bg-primary); border: 1px solid var(--border-primary); padding: var(--spacing-lg); border-radius: var(--radius-md); margin-bottom: var(--spacing-xl);">
+                <p style="font-size: 1.125rem; color: var(--text-secondary); margin-bottom: var(--spacing-xl);">Thank you for your order.</p>
+                <div style="background: var(--bg-primary); border: 2px solid #28a745; padding: var(--spacing-lg); border-radius: var(--radius-md); margin-bottom: var(--spacing-xl);">
+                    <p style="font-size: 1.125rem; color: var(--text-primary); margin-bottom: var(--spacing-md); font-weight: 600;">Order Number: <span style="color: #28a745; font-weight: 700; font-size: 1.5rem;">#<?php echo $order_id; ?></span></p>
                     <p style="color: var(--text-secondary); margin: 0; line-height: 1.6;">We will process your order and send you an email confirmation shortly. You can track your order status from your account.</p>
                 </div>
                 <div style="display: flex; gap: var(--spacing-md); justify-content: center;">
@@ -303,56 +318,56 @@ include 'includes/header.php';
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="first_name" class="form-label" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">First Name</label>
-                            <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo htmlspecialchars($user_data['first_name'] ?? ''); ?>" required style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
+                            <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo htmlspecialchars($user_data['first_name'] ?? ''); ?>" required style="background: var(--bg-primary); border: 1px solid #000; color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="last_name" class="form-label" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">Last Name</label>
-                            <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo htmlspecialchars($user_data['last_name'] ?? ''); ?>" required style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
+                            <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo htmlspecialchars($user_data['last_name'] ?? ''); ?>" required style="background: var(--bg-primary); border: 1px solid #000; color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="email" class="form-label" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($user_data['email'] ?? ''); ?>" required style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
+                            <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($user_data['email'] ?? ''); ?>" required style="background: var(--bg-primary); border: 1px solid #000; color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="phone" class="form-label" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">Phone Number</label>
-                            <input type="tel" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($user_data['phone'] ?? ''); ?>" required placeholder="+63 912 345 6789" style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
+                            <input type="tel" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($user_data['phone'] ?? ''); ?>" required placeholder="+63 912 345 6789" style="background: var(--bg-primary); border: 1px solid #000; color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="house_number" class="form-label" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">House/Building Number</label>
-                            <input type="text" class="form-control" id="house_number" name="house_number" required style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
+                            <input type="text" class="form-control" id="house_number" name="house_number" required style="background: var(--bg-primary); border: 1px solid #000; color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="street" class="form-label" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">Street Name</label>
-                            <input type="text" class="form-control" id="street" name="street" required style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
+                            <input type="text" class="form-control" id="street" name="street" required style="background: var(--bg-primary); border: 1px solid #000; color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="barangay" class="form-label" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">Barangay</label>
-                            <input type="text" class="form-control" id="barangay" name="barangay" required style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
+                            <input type="text" class="form-control" id="barangay" name="barangay" required style="background: var(--bg-primary); border: 1px solid #000; color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="city" class="form-label" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">City/Municipality</label>
-                            <input type="text" class="form-control" id="city" name="city" required style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
+                            <input type="text" class="form-control" id="city" name="city" required style="background: var(--bg-primary); border: 1px solid #000; color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="province" class="form-label" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">Province</label>
-                            <input type="text" class="form-control" id="province" name="province" required style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
+                            <input type="text" class="form-control" id="province" name="province" required style="background: var(--bg-primary); border: 1px solid #000; color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="postal_code" class="form-label" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">Postal Code</label>
-                            <input type="text" class="form-control" id="postal_code" name="postal_code" required style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
+                            <input type="text" class="form-control" id="postal_code" name="postal_code" required style="background: var(--bg-primary); border: 1px solid #000; color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%;">
                         </div>
                     </div>
 
                     <h3 style="font-size: 1.5rem; font-weight: 700; margin-top: var(--spacing-xl); margin-bottom: var(--spacing-lg); color: var(--text-primary);">Payment Method</h3>
-                    <div class="mb-4" style="background: var(--bg-primary); border: 1px solid var(--border-primary); padding: var(--spacing-lg); border-radius: var(--radius-md);">
+                    <div class="mb-4" style="background: var(--bg-primary); border: 1px solid #000; padding: var(--spacing-lg); border-radius: var(--radius-md);">
                         <div class="form-check" style="display: flex; align-items: center; gap: var(--spacing-md);">
                             <input class="form-check-input" type="radio" name="payment_mode" id="cod" value="cod" required <?php echo ($selected_payment_mode === 'cod') ? 'checked' : ''; ?> style="width: 20px; height: 20px; accent-color: var(--accent-primary);">
                             <label class="form-check-label" for="cod" style="color: var(--text-primary); font-weight: 600; font-size: 1.0625rem;">
@@ -362,7 +377,7 @@ include 'includes/header.php';
                         <small class="form-text" style="color: var(--text-secondary); display: block; margin-top: var(--spacing-sm); margin-left: 32px;">Pay when your order arrives at your doorstep</small>
                     </div>
 
-                    <div class="mb-4" style="background: var(--bg-primary); border: 1px solid var(--border-primary); padding: var(--spacing-lg); border-radius: var(--radius-md);">
+                    <div class="mb-4" style="background: var(--bg-primary); border: 1px solid #000; padding: var(--spacing-lg); border-radius: var(--radius-md);">
                         <div class="form-check" style="display: flex; align-items: center; gap: var(--spacing-md);">
                             <input class="form-check-input" type="radio" name="payment_mode" id="paypal" value="paypal" <?php echo ($selected_payment_mode === 'paypal') ? 'checked' : ''; ?> style="width: 20px; height: 20px; accent-color: var(--accent-primary);">
                             <label class="form-check-label" for="paypal" style="color: var(--text-primary); font-weight: 600; font-size: 1.0625rem;">
@@ -372,7 +387,7 @@ include 'includes/header.php';
                         <small class="form-text" style="color: var(--text-secondary); display: block; margin-top: var(--spacing-sm); margin-left: 32px;">Pay securely using PayPal (<?php echo (defined('PAYPAL_ENV') && PAYPAL_ENV === 'live') ? 'Live' : 'Sandbox'; ?>). Click <strong>Place Order</strong> to proceed.</small>
                     </div>
 
-                    <div id="paypal-section" class="mb-4" style="display:none; background: var(--bg-primary); border: 1px solid var(--border-primary); padding: var(--spacing-lg); border-radius: var(--radius-md);">
+                    <div id="paypal-section" class="mb-4" style="display:none; background: var(--bg-primary); border: 1px solid #000; padding: var(--spacing-lg); border-radius: var(--radius-md);">
                         <?php if (defined('PAYPAL_CLIENT_ID') && PAYPAL_CLIENT_ID !== '' && PAYPAL_CLIENT_ID !== 'client_id_here' && PAYPAL_CLIENT_ID !== 'YOUR_SANDBOX_CLIENT_ID_HERE'): ?>
                             <div id="paypal-errors" style="display:none; background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); color: var(--danger); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-md);"></div>
                             <div id="paypal-loading" style="display:none; background: rgba(30, 64, 175, 0.08); border: 1px solid rgba(30, 64, 175, 0.25); color: var(--text-primary); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-md);">
@@ -403,13 +418,13 @@ include 'includes/header.php';
                             <p style="color: var(--text-primary); font-weight: 500; margin-bottom: 0.25rem;"><?php echo htmlspecialchars($item['name']); ?></p>
                             <small style="color: var(--text-secondary);">Qty: <?php echo $item['quantity']; ?></small>
                         </div>
-                        <span style="color: var(--accent-primary); font-weight: 600;"><?php echo format_price($item['price'] * $item['quantity']); ?></span>
+                        <span style="color: #000; font-weight: 600;"><?php echo format_price($item['price'] * $item['quantity']); ?></span>
                     </div>
                     <?php endforeach; ?>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--spacing-md); background: var(--bg-primary); border-radius: var(--radius-md);">
                     <h4 style="font-size: 1.25rem; font-weight: 700; margin: 0; color: var(--text-primary);">Total</h4>
-                    <h4 style="font-size: 1.5rem; font-weight: 700; margin: 0; color: var(--accent-primary);"><?php echo format_price($total); ?></h4>
+                    <h4 style="font-size: 1.5rem; font-weight: 700; margin: 0; color: #000;"><?php echo format_price($total); ?></h4>
                 </div>
             </div>
         </div>

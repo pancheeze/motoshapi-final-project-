@@ -34,7 +34,6 @@ $navItems = [
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/dark-mode.css">
 </head>
 <body class="<?php echo htmlspecialchars($bodyClass, ENT_QUOTES); ?>">
     <div class="d-flex flex-column min-vh-100">
@@ -62,11 +61,6 @@ $navItems = [
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="logout.php">Logout</a>
-                        </li>
-                        <li class="nav-item">
-                            <button class="btn btn-link nav-link p-0 dark-mode-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
-                                <i class="bi bi-moon"></i>
-                            </button>
                         </li>
                     </ul>
                 </div>

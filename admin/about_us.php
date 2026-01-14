@@ -16,7 +16,7 @@ $success = '';
 // Add new member
 if(isset($_POST['add_member'])) {
     $name = trim($_POST['name']);
-    $description = trim($_POST['description']);
+    $description = trim($_POST['description'] ?? '');
     $photo_url = '';
     if(isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
         $allowed = ['jpg', 'jpeg', 'png', 'gif'];
@@ -39,7 +39,7 @@ if(isset($_POST['add_member'])) {
     }
     if(!$error) {
         $stmt = $conn->prepare("INSERT INTO about_us (name, photo_url, description) VALUES (?, ?, ?)");
-        $stmt->execute([$name, $photo_url, $description]);
+        $stmt->execute([$name, $photo_url !== '' ? $photo_url : null, $description !== '' ? $description : null]);
         $success = "Team member added.";
     }
 }
@@ -48,8 +48,8 @@ if(isset($_POST['add_member'])) {
 if(isset($_POST['edit_member'])) {
     $id = intval($_POST['id']);
     $name = trim($_POST['name']);
-    $description = trim($_POST['description']);
-    $photo_url = $_POST['current_photo'];
+    $description = trim($_POST['description'] ?? '');
+    $photo_url = $_POST['current_photo'] ?? '';
     if(isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
         $allowed = ['jpg', 'jpeg', 'png', 'gif'];
         $filename = $_FILES['photo']['name'];
@@ -71,7 +71,7 @@ if(isset($_POST['edit_member'])) {
     }
     if(!$error) {
         $stmt = $conn->prepare("UPDATE about_us SET name=?, photo_url=?, description=? WHERE id=?");
-        $stmt->execute([$name, $photo_url, $description, $id]);
+        $stmt->execute([$name, $photo_url !== '' ? $photo_url : null, $description !== '' ? $description : null, $id]);
         $success = "Team member updated.";
     }
 }
@@ -97,7 +97,6 @@ $members = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="../assets/css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="../assets/css/dark-mode.css" rel="stylesheet">
 </head>
 <body>
     <div class="container mt-4">
@@ -114,13 +113,13 @@ $members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <form method="POST" enctype="multipart/form-data">
                     <div class="row g-3 align-items-center">
                         <div class="col-md-3">
-                            <input type="file" class="form-control" name="photo" accept="image/*" required>
+                            <input type="file" class="form-control" name="photo" accept="image/*">
                         </div>
                         <div class="col-md-3">
                             <input type="text" class="form-control" name="name" placeholder="Name" required>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" class="form-control" name="description" placeholder="Description" required>
+                            <textarea class="form-control" name="description" placeholder="Description (optional)" rows="2"></textarea>
                         </div>
                         <div class="col-md-2">
                             <button type="submit" name="add_member" class="btn btn-primary">Add</button>
@@ -158,7 +157,7 @@ $members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <input type="text" class="form-control" name="name" value="<?php echo htmlspecialchars($member['name']); ?>" required>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" name="description" value="<?php echo htmlspecialchars($member['description']); ?>" required>
+                                        <textarea class="form-control" name="description" rows="3"><?php echo htmlspecialchars($member['description'] ?? ''); ?></textarea>
                                     </td>
                                     <td>
                                         <input type="hidden" name="id" value="<?php echo $member['id']; ?>">
@@ -176,6 +175,5 @@ $members = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/js/dark-mode.js"></script>
 </body>
 </html> 

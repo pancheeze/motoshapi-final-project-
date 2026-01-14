@@ -110,7 +110,7 @@
               appendBubble(messages, m.role, m.text);
             }
           } else {
-            const greet = 'Hi! How can I help you today? You can ask about products, prices, payment methods, or your cart.';
+            const greet = 'Hi! How can I help you today? Ask about products, prices, stock availability (e.g., stock of "Motul"), payment methods (COD/PayPal), checkout steps, password reset, or order status.';
             appendBubble(messages, 'assistant', greet);
             pushHistory(history, 'assistant', greet);
           }

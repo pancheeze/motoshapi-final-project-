@@ -170,6 +170,21 @@ try {
     $stmt = $conn->prepare('INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)');
     foreach ($checkout_items as $item) {
         $stmt->execute([$order_id, (int)$item['id'], (int)$item['quantity'], (float)$item['price']]);
+        
+        // Update stock in real-time based on whether it's a variation or regular product
+        if ($buy_now && isset($variation_id) && $variation_id) {
+            // Update variation stock
+            $stock_stmt = $conn->prepare('UPDATE variations SET stock = GREATEST(0, stock - ?) WHERE id = ?');
+            $stock_stmt->execute([(int)$item['quantity'], $variation_id]);
+        } elseif (!empty($item['variation_id'])) {
+            // Update variation stock for cart items
+            $stock_stmt = $conn->prepare('UPDATE variations SET stock = GREATEST(0, stock - ?) WHERE id = ?');
+            $stock_stmt->execute([(int)$item['quantity'], (int)$item['variation_id']]);
+        } else {
+            // Update regular product stock
+            $stock_stmt = $conn->prepare('UPDATE products SET stock = GREATEST(0, stock - ?) WHERE id = ?');
+            $stock_stmt->execute([(int)$item['quantity'], (int)$item['id']]);
+        }
     }
 
     $stmt = $conn->prepare('INSERT INTO shipping_information (order_id, first_name, last_name, email, phone, house_number, street, barangay, city, province, postal_code, payment_mode_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -310,3 +325,4 @@ try {
     }
     json_response(['success' => false, 'message' => $e->getMessage()], 400);
 }
+?>

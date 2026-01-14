@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 21, 2025 at 02:57 AM
+-- Generation Time: Jan 14, 2026 at 02:57 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -39,9 +39,11 @@ CREATE TABLE `about_us` (
 --
 
 INSERT INTO `about_us` (`id`, `name`, `photo_url`, `description`) VALUES
-(1, 'John Carlo Marasigan', 'uploads/about_us/68554c6f25148.jpg', 'John Carlo is the technical backbone of Motoshapi, serving as our Database Administrator and Supporting Programmer. With expertise in database management, backend development, and server optimization, he ensure that our platform runs smoothly, securely, and efficiently. His work in maintaining data integrity, improving site performance, and implementing new features helps deliver a seamless experience for our users.'),
-(2, 'Marc Angelo Canillas', 'uploads/about_us/6852bc5f445e0.jpg', 'Meet Our Lead Programmer, Marc is the visionary developer behind the Motoshapi website, with a passion for crafting clean, efficient, and innovative code. With expertise in Front-end Development, Back-end Development, he brings technical excellence and creative problem-solving to every project. Dedicated to continuous learning and cutting-edge solutions, Marc ensures our software is both powerful and user-friendly.'),
-(3, 'Ralph Mathew Cawilan', 'uploads/about_us/68554b71c8449.jpg', 'Meet Our Editor, Ralph is the dedicated editor behind Motoshapi, bringing his passion for editing every piece of content. With a keen eye for detail and a commitment to accuracy, Ralph ensures that our readers receive informative, engaging, and well-crafted articles. He has a background in Web Designing, and his expertise helps shape Motoshapi into a trusted resource for our beloved customers.');
+(1, 'John Carlo Marasigan', 'uploads/about_us/68554c6f25148.jpg', 'UI/UX Designer'),
+(2, 'Marc Angelo Canillas', 'uploads/about_us/6852bc5f445e0.jpg', 'Front-end Developer'),
+(3, 'Ralph Mathew Cawilan', 'uploads/about_us/68554b71c8449.jpg', 'Front-end Developer'),
+(4, 'Paul Anthony Pancho', 'uploads/about_us/612332863_1146276200704681_1310027029829767264_n.jpg', 'Back-end Developer'),
+(5, 'Mark Vincent Plaza', 'uploads/about_us/614886072_4059406387537507_3517121579349222507_n.png', 'Back-end Developer');
 
 -- --------------------------------------------------------
 
@@ -66,9 +68,9 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `username`, `password`, `email`, `full_name`, `last_login`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'jc', 'jc123', 'jc@example.com', 'System Administrator', '2025-06-13 12:31:15', 'active', '2025-06-11 04:44:55', '2025-06-13 12:31:15'),
-(2, 'marc', 'marc123', 'marc@example.com', 'Marc', '2025-06-21 00:57:19', 'active', '2025-06-11 05:03:41', '2025-06-21 00:57:19'),
-(3, 'ralph', 'ralph123', 'ralph@example.com', 'Ralph', '2025-06-11 05:19:41', 'active', '2025-06-11 05:19:25', '2025-06-11 05:19:41');
+(1, 'jc', 'jc123', 'jc@example.com', 'System Administrator', '2026-01-13 12:31:15', 'active', '2026-01-10 04:44:55', '2026-01-13 12:31:15'),
+(2, 'marc', 'marc123', 'marc@example.com', 'Marc', '2026-01-14 00:57:19', 'active', '2026-01-10 05:03:41', '2026-01-14 00:57:19'),
+(3, 'ralph', 'ralph123', 'ralph@example.com', 'Ralph', '2026-01-11 05:19:41', 'active', '2026-01-10 05:19:25', '2026-01-11 05:19:41');
 
 -- --------------------------------------------------------
 
@@ -88,9 +90,9 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `description`, `created_at`) VALUES
-(2, 'Tires', 'Upgrade your bike with high-quality tires for unbeatable grip, durability, and performance. Perfect for street, sport, or off-road riding.\r\n\r\n✔ Superior traction & stability\r\n✔ Long-lasting tread life\r\n✔ Best brands at great prices\r\n\r\nGet the right tires for your ride—shop now! 🏍️🔥', '2025-06-09 11:54:15'),
-(3, 'Mags', 'Upgrade your bike\'s look and performance with our premium motorcycle mags. Lightweight, stylish, and built for strength—perfect for any rider.\r\n\r\n✔ Strong alloy construction\r\n✔ Sleek, eye-catching designs\r\n✔ Better handling & durability\r\n\r\nBoost your bike\'s style & performance—shop now! 🏍️✨\r\n\r\n', '2025-06-09 11:56:09'),
-(4, 'Motor Oil', '\r\nKeep your engine running stronger for longer with our high-performance motorcycle oils. Formulated for maximum protection, smoother shifts, and extended engine life.\r\n\r\n✔ Advanced synthetic & mineral blends\r\n✔ Enhanced heat & friction resistance\r\n✔ Optimal clutch & gearbox performance\r\n\r\nProtect your ride – choose the right oil today! 🏍️⚡', '2025-06-09 11:57:44');
+(2, 'Tires', 'Upgrade your bike with high-quality tires for unbeatable grip, durability, and performance. Perfect for street, sport, or off-road riding.\r\n\r\n✔ Superior traction & stability\r\n✔ Long-lasting tread life\r\n✔ Best brands at great prices\r\n\r\nGet the right tires for your ride—shop now! 🏍️🔥', '2026-01-05 11:54:15'),
+(3, 'Mags', 'Upgrade your bike\'s look and performance with our premium motorcycle mags. Lightweight, stylish, and built for strength—perfect for any rider.\r\n\r\n✔ Strong alloy construction\r\n✔ Sleek, eye-catching designs\r\n✔ Better handling & durability\r\n\r\nBoost your bike\'s style & performance—shop now! 🏍️✨\r\n\r\n', '2026-01-05 11:56:09'),
+(4, 'Motor Oil', '\r\nKeep your engine running stronger for longer with our high-performance motorcycle oils. Formulated for maximum protection, smoother shifts, and extended engine life.\r\n\r\n✔ Advanced synthetic & mineral blends\r\n✔ Enhanced heat & friction resistance\r\n✔ Optimal clutch & gearbox performance\r\n\r\nProtect your ride – choose the right oil today! 🏍️⚡', '2026-01-05 11:57:44');
 
 -- --------------------------------------------------------
 
@@ -117,18 +119,18 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `first_name`, `last_name`, `total_amount`, `status`, `transaction_type`, `payment_mode_id`, `payment_details`, `created_at`, `updated_at`) VALUES
-(11, NULL, NULL, NULL, 7500.00, 'pending', 'online', 1, '[]', '2025-06-13 11:17:28', '2025-06-13 11:17:28'),
-(12, NULL, NULL, NULL, 6000.00, 'pending', 'online', 1, '[]', '2025-06-13 11:22:00', '2025-06-13 11:22:00'),
-(13, NULL, NULL, NULL, 750.00, 'pending', 'online', 1, '[]', '2025-06-13 11:22:43', '2025-06-13 11:22:43'),
-(14, 4, 'joki', 'banks', 13000.00, 'delivered', 'online', 1, NULL, '2025-06-13 11:32:21', '2025-06-13 11:32:21'),
-(15, 4, 'Marc Angelo', 'Canillas', 25500.00, 'delivered', 'online', 1, NULL, '2025-06-18 14:01:49', '2025-06-18 14:01:49'),
-(29, 4, 'Marc Angelo', 'Canillas', 950.00, 'pending', 'online', 2, '[]', '2025-06-19 03:22:29', '2025-06-19 03:22:29'),
-(30, 4, 'Marc Angelo', 'Canillas', 8250.00, 'pending', 'online', 1, '[]', '2025-06-19 04:25:45', '2025-06-19 04:25:45'),
-(31, 4, 'Marc Angelo', 'Canillas', 22600.00, 'pending', 'online', 3, '[]', '2025-06-20 04:26:55', '2025-06-20 04:26:55'),
-(32, 4, 'Marc Angelo', 'Canillas', 950.00, 'pending', 'online', 2, '[]', '2025-06-20 05:11:50', '2025-06-20 05:11:50'),
-(33, 4, 'Marc Angelo', 'Canillas', 22000.00, 'pending', 'online', 2, '[]', '2025-06-20 06:27:07', '2025-06-20 06:27:07'),
-(34, 4, 'Marc Angelo', 'Canillas', 19550.00, 'pending', 'online', 2, '[]', '2025-06-20 12:33:54', '2025-06-20 12:33:54'),
-(35, 3, 'Marc Angelo', 'Canillas', 600.00, 'pending', 'online', 1, '[]', '2025-06-20 12:34:26', '2025-06-20 12:34:26');
+(11, NULL, NULL, NULL, 7500.00, 'pending', 'online', 1, '[]', '2026-01-08 11:17:28', '2026-01-08 11:17:28'),
+(12, NULL, NULL, NULL, 6000.00, 'pending', 'online', 1, '[]', '2026-01-08 11:22:00', '2026-01-08 11:22:00'),
+(13, NULL, NULL, NULL, 750.00, 'pending', 'online', 1, '[]', '2026-01-08 11:22:43', '2026-01-08 11:22:43'),
+(14, 4, 'joki', 'banks', 13000.00, 'delivered', 'online', 1, NULL, '2026-01-09 11:32:21', '2026-01-09 11:32:21'),
+(15, 4, 'Marc Angelo', 'Canillas', 25500.00, 'delivered', 'online', 1, NULL, '2026-01-10 14:01:49', '2026-01-10 14:01:49'),
+(29, 4, 'Marc Angelo', 'Canillas', 950.00, 'pending', 'online', 2, '[]', '2026-01-11 03:22:29', '2026-01-11 03:22:29'),
+(30, 4, 'Marc Angelo', 'Canillas', 8250.00, 'pending', 'online', 1, '[]', '2026-01-11 04:25:45', '2026-01-11 04:25:45'),
+(31, 4, 'Marc Angelo', 'Canillas', 22600.00, 'pending', 'online', 1, '[]', '2026-01-12 04:26:55', '2026-01-12 04:26:55'),
+(32, 4, 'Marc Angelo', 'Canillas', 950.00, 'pending', 'online', 2, '[]', '2026-01-12 05:11:50', '2026-01-12 05:11:50'),
+(33, 4, 'Marc Angelo', 'Canillas', 22000.00, 'pending', 'online', 2, '[]', '2026-01-13 06:27:07', '2026-01-13 06:27:07'),
+(34, 4, 'Marc Angelo', 'Canillas', 19550.00, 'pending', 'online', 2, '[]', '2026-01-13 12:33:54', '2026-01-13 12:33:54'),
+(35, 3, 'Marc Angelo', 'Canillas', 600.00, 'pending', 'online', 1, '[]', '2026-01-14 12:34:26', '2026-01-14 12:34:26');
 
 -- --------------------------------------------------------
 
@@ -150,22 +152,22 @@ CREATE TABLE `order_items` (
 --
 
 INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `price`, `created_at`) VALUES
-(10, 11, 9, 10, 750.00, '2025-06-13 11:17:28'),
-(11, 12, 8, 10, 600.00, '2025-06-13 11:22:00'),
-(12, 13, 9, 1, 750.00, '2025-06-13 11:22:43'),
-(13, 14, 6, 1, 13000.00, '2025-06-13 11:32:21'),
-(14, 15, 6, 1, 13000.00, '2025-06-18 14:01:49'),
-(15, 15, 5, 1, 12500.00, '2025-06-18 14:01:49'),
-(23, 29, 7, 1, 950.00, '2025-06-19 03:22:29'),
-(24, 30, 9, 11, 750.00, '2025-06-19 04:25:45'),
-(25, 31, 3, 1, 22000.00, '2025-06-20 04:26:55'),
-(26, 31, 8, 1, 600.00, '2025-06-20 04:26:55'),
-(27, 32, 7, 1, 950.00, '2025-06-20 05:11:50'),
-(28, 33, 3, 1, 22000.00, '2025-06-20 06:27:07'),
-(29, 34, 7, 1, 950.00, '2025-06-20 12:33:54'),
-(30, 34, 8, 1, 600.00, '2025-06-20 12:33:54'),
-(31, 34, 2, 1, 18000.00, '2025-06-20 12:33:54'),
-(32, 35, 8, 1, 600.00, '2025-06-20 12:34:26');
+(10, 11, 9, 10, 750.00, '2026-01-08 11:17:28'),
+(11, 12, 8, 10, 600.00, '2026-01-08 11:22:00'),
+(12, 13, 9, 1, 750.00, '2026-01-08 11:22:43'),
+(13, 14, 6, 1, 13000.00, '2026-01-09 11:32:21'),
+(14, 15, 6, 1, 13000.00, '2026-01-10 14:01:49'),
+(15, 15, 5, 1, 12500.00, '2026-01-10 14:01:49'),
+(23, 29, 7, 1, 950.00, '2026-01-11 03:22:29'),
+(24, 30, 9, 11, 750.00, '2026-01-11 04:25:45'),
+(25, 31, 3, 1, 22000.00, '2026-01-12 04:26:55'),
+(26, 31, 8, 1, 600.00, '2026-01-12 04:26:55'),
+(27, 32, 7, 1, 950.00, '2026-01-12 05:11:50'),
+(28, 33, 3, 1, 22000.00, '2026-01-13 06:27:07'),
+(29, 34, 7, 1, 950.00, '2026-01-13 12:33:54'),
+(30, 34, 8, 1, 600.00, '2026-01-13 12:33:54'),
+(31, 34, 2, 1, 18000.00, '2026-01-13 12:33:54'),
+(32, 35, 8, 1, 600.00, '2026-01-14 12:34:26');
 
 -- --------------------------------------------------------
 
@@ -186,8 +188,8 @@ CREATE TABLE `payment_modes` (
 --
 
 INSERT INTO `payment_modes` (`id`, `mode_name`, `mode_code`, `is_active`, `created_at`) VALUES
-(1, 'Cash on Delivery (COD)', 'cod', 1, '2025-06-18 14:51:27'),
-(2, 'PayPal', 'paypal', 1, '2025-06-18 14:51:27');
+(1, 'Cash on Delivery (COD)', 'cod', 1, '2026-01-05 14:51:27'),
+(2, 'PayPal', 'paypal', 1, '2026-01-05 14:51:27');
 
 
 -- --------------------------------------------------------
@@ -231,14 +233,14 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `category_id`, `name`, `description`, `price`, `stock`, `image_url`, `created_at`, `updated_at`, `featured`, `is_active`) VALUES
-(2, 2, 'Pirelli Diablo Rosso Slim-Type Tire', '✔ Type: High-performance street/sport tire (ideal for PH roads & weather)\r\n✔ Popular PH Bike Fitments:\r\n\r\n150cc-400cc bikes: R15, Ninja 250/400, Dominar 250/400, CBR250/300\r\n\r\nScooters: NMAX 155 (rear conversions), PCX160 (check size variants)\r\n✔ Compound: Dual-compound (longer wear in PH heat + grip for twisties like Marilaque)\r\n✔ Tread: Rain channels for wet-season safety (monsoon-ready)\r\n✔ PH-Specific Advantage: Slim profile fits common PH sport/modified setups without swingarm mods', 18000.00, 10, 'uploads/products/6846ce2076e89.png', '2025-06-09 12:05:52', '2025-06-09 12:05:52', 0, 1),
-(3, 2, 'Pirelli Diablo Rosso Track-Spec Tire', '✔ Type: Track-focused sport tire (street-legal but race-bred)\r\n✔ PH Bike Fitment (Common Models):\r\n\r\n300cc-600cc: Ninja 400, Yamaha R3/R7, CBR500R, Duke 390\r\n\r\n600cc+: ZX-6R, CBR650R (check exact size requirements)\r\n\r\n✔ Track-Optimized Features:\r\n\r\nFull-slick center with minimal grooves (max dry grip)\r\n\r\nSoft race compound for aggressive lean angles\r\n\r\nStiffer sidewalls for track stability at high speeds', 22000.00, 8, 'uploads/products/6846cfe0da582.png', '2025-06-09 12:13:20', '2025-06-09 12:13:20', 1, 1),
-(4, 2, 'Bridgestone Dual Sport Tire', '✔ Type: 80% Road / 20% Off-Road (Perfect for PH Adventure & Rough Roads)\r\n✔ PH Bike Compatibility:\r\n\r\nAdventure Bikes: Honda CB500X, Versys 650, BMW G310GS, KTM 390 Adventure\r\n\r\nBig Scooters: Yamaha TMAX, XMAX 300 (check size availability)\r\n\r\nEnduro/Trail: CRF250L, KLX250 (for riders who prioritize road comfort)\r\n\r\n✔ Key Features for PH Riders:\r\n\r\nDurable center tread for highway longevity (Manila to Baguio rides)\r\n\r\nAggressive shoulder blocks for light off-road (Dirt to Sierra Madre trails)\r\n\r\nWet-optimized grooves – Safe for monsoon season riding', 14500.00, 8, 'uploads/products/6846d12e95708.png', '2025-06-09 12:18:54', '2025-06-09 12:18:54', 0, 1),
-(5, 3, 'RacingBoy 6-Spoke Alloy Mags', '✔ Type: Lightweight Aftermarket Alloy Wheels (Sport/Street Design)\r\n✔ PH Bike Compatibility:\r\n\r\nUnderbones: Yamaha Sniper 155, Mio i125/i125S, Honda RS150, Suzuki Raider 150\r\n\r\nSport Bikes: R15 V3/V4, Fazzio 125 (check hub compatibility)\r\n\r\nMaxi-Scooters: Aerox 155, NMAX 155 (rear wheel conversions only)\r\n\r\n✔ Key Features:\r\n\r\n6-spoke forged alloy – Strong yet lightweight for better acceleration\r\n\r\nJ-Size Options: 1.85x17 (front) / 2.15x17 (rear) – Fits 70/90 to 100/80 tires\r\n\r\nColors: Gold, Black, Red, Silver (matte/gloss)', 12500.00, 5, 'uploads/products/6846d5ff648a2.png', '2025-06-09 12:39:27', '2025-06-09 12:39:27', 1, 1),
-(6, 3, 'RacingBoy 5-Spoke Alloy Mags ', '✔ Type: Lightweight Performance Wheels (Street & Racing Use)\r\n✔ PH Bike Compatibility:\r\n\r\nUnderbones: Yamaha Sniper 155, Mio i125/i125S, Honda RS150, Suzuki Raider 150\r\n\r\nSport Bikes: Yamaha R15 (V3/V4), Kawasaki Rouser NS200\r\n\r\nScooters: Aerox 155 (rear conversion only), Fazzio 125 (check fitment)\r\n\r\n✔ Key Features:\r\n\r\n5-spoke forged alloy – Aggressive design with high strength-to-weight ratio\r\n\r\nTubeless-ready – Improves safety & reduces puncture risks\r\n\r\nJ-Size Options: 1.60x17 / 1.85x17 / 2.15x17 (fits 70/90 to 110/90 tires)\r\n\r\nColors: Matte Black, Gold, Red, Silver', 13000.00, 6, 'uploads/products/6846d64918082.png', '2025-06-09 12:40:41', '2025-06-09 12:40:41', 0, 1),
-(7, 4, 'Motul Fully Syntethic Oil', '✔ Type: High-performance 100% synthetic engine oil (ester-based technology)\r\n✔ Best for PH Motorcycles:\r\n\r\nSmall Bikes (Underbones/Scoots): Mio i125, Click 125, PCX160, Aerox 155 (Motul 7100 10W-40)\r\n\r\nBig Bikes (400cc+): Ninja 400, Dominar 400, Z650 (Motul 300V 15W-50)\r\n\r\nHigh-Revving Sportbikes: Yamaha R15, R3, CBR150R (Motul 5100 15W-50)\r\n\r\n✔ Key Benefits for PH Riders:\r\n\r\nHeat resistance – Stays stable in PH traffic & long rides (Baguio to Batangas)\r\n\r\nEngine protection – Reduces wear on high-mileage bikes (ideal for Grab riders)\r\n\r\nSmoother shifts – Optimized for PH common wet-clutch systems', 950.00, 12, 'uploads/products/6846d702dd1aa.png', '2025-06-09 12:43:46', '2025-06-09 12:43:46', 1, 1),
-(8, 4, 'Petron Fully Syntethic Oil', '✔ Type: 100% Synthetic Engine Oil (API SN/JASO MA2 Certified)\r\n✔ PH Motorcycle Compatibility:\r\n\r\nUnderbones/Scooters: Mio i125, Click 125/160, PCX160, Aerox 155 (10W-40)\r\n\r\nSport Bikes: Yamaha R15, Suzuki Raider 150, Kawasaki Rouser NS200 (15W-50)\r\n\r\nBig Bikes: Dominar 400, Ninja 650 (20W-50 for high-temp protection)\r\n\r\n✔ Key Features for PH Riders:\r\n\r\nTraffic-ready – Superior heat resistance for stop-and-go Metro Manila rides\r\n\r\nWet-clutch safe – Prevents slippage in common PH bikes\r\n\r\nSludge prevention – Cleans old engine deposits (ideal for 2nd-hand bikes)', 600.00, 14, 'uploads/products/6846d7426af2d.png', '2025-06-09 12:44:50', '2025-06-09 12:44:50', 0, 1),
-(9, 4, 'Shell Fully Syntethic Oil', '✔ Type: 100% Synthetic Engine Oil (API SN+/JASO MA2 Certified)\r\n✔ PH Motorcycle Compatibility:\r\n\r\nUnderbones/Scooters: Mio i125, Click 125/160, PCX160, Aerox 155 (Shell Advance Ultra 10W-40)\r\n\r\nSport Bikes: Yamaha R15, Suzuki GSX-R150, Kawasaki Ninja 250 (Shell Advance Ultra 15W-50)\r\n\r\nBig Bikes: Dominar 400, CB650R (Shell Advance Ultra 20W-50)\r\n\r\n✔ Key Features for PH Riders:\r\n\r\nActive Cleansing Tech – Reduces engine deposits (ideal for old/taxi bikes)\r\n\r\nTriple Protection+ – Anti-wear, heat resistance & fuel efficiency\r\n\r\nWet-Clutch Optimized – Safe for PH\'s common manual-transmission bikes', 750.00, 13, 'uploads/products/6846d78bb144b.png', '2025-06-09 12:46:03', '2025-06-09 12:46:03', 0, 1);
+(2, 2, 'Pirelli Diablo Rosso Slim-Type Tire', '✔ Type: High-performance street/sport tire (ideal for PH roads & weather)\r\n✔ Popular PH Bike Fitments:\r\n\r\n150cc-400cc bikes: R15, Ninja 250/400, Dominar 250/400, CBR250/300\r\n\r\nScooters: NMAX 155 (rear conversions), PCX160 (check size variants)\r\n✔ Compound: Dual-compound (longer wear in PH heat + grip for twisties like Marilaque)\r\n✔ Tread: Rain channels for wet-season safety (monsoon-ready)\r\n✔ PH-Specific Advantage: Slim profile fits common PH sport/modified setups without swingarm mods', 18000.00, 10, 'uploads/products/6846ce2076e89.png', '2026-01-06 12:05:52', '2026-01-06 12:05:52', 0, 1),
+(3, 2, 'Pirelli Diablo Rosso Track-Spec Tire', '✔ Type: Track-focused sport tire (street-legal but race-bred)\r\n✔ PH Bike Fitment (Common Models):\r\n\r\n300cc-600cc: Ninja 400, Yamaha R3/R7, CBR500R, Duke 390\r\n\r\n600cc+: ZX-6R, CBR650R (check exact size requirements)\r\n\r\n✔ Track-Optimized Features:\r\n\r\nFull-slick center with minimal grooves (max dry grip)\r\n\r\nSoft race compound for aggressive lean angles\r\n\r\nStiffer sidewalls for track stability at high speeds', 22000.00, 8, 'uploads/products/6846cfe0da582.png', '2026-01-06 12:13:20', '2026-01-06 12:13:20', 1, 1),
+(4, 2, 'Bridgestone Dual Sport Tire', '✔ Type: 80% Road / 20% Off-Road (Perfect for PH Adventure & Rough Roads)\r\n✔ PH Bike Compatibility:\r\n\r\nAdventure Bikes: Honda CB500X, Versys 650, BMW G310GS, KTM 390 Adventure\r\n\r\nBig Scooters: Yamaha TMAX, XMAX 300 (check size availability)\r\n\r\nEnduro/Trail: CRF250L, KLX250 (for riders who prioritize road comfort)\r\n\r\n✔ Key Features for PH Riders:\r\n\r\nDurable center tread for highway longevity (Manila to Baguio rides)\r\n\r\nAggressive shoulder blocks for light off-road (Dirt to Sierra Madre trails)\r\n\r\nWet-optimized grooves – Safe for monsoon season riding', 14500.00, 8, 'uploads/products/6846d12e95708.png', '2026-01-06 12:18:54', '2026-01-06 12:18:54', 0, 1),
+(5, 3, 'RacingBoy 6-Spoke Alloy Mags', '✔ Type: Lightweight Aftermarket Alloy Wheels (Sport/Street Design)\r\n✔ PH Bike Compatibility:\r\n\r\nUnderbones: Yamaha Sniper 155, Mio i125/i125S, Honda RS150, Suzuki Raider 150\r\n\r\nSport Bikes: R15 V3/V4, Fazzio 125 (check hub compatibility)\r\n\r\nMaxi-Scooters: Aerox 155, NMAX 155 (rear wheel conversions only)\r\n\r\n✔ Key Features:\r\n\r\n6-spoke forged alloy – Strong yet lightweight for better acceleration\r\n\r\nJ-Size Options: 1.85x17 (front) / 2.15x17 (rear) – Fits 70/90 to 100/80 tires\r\n\r\nColors: Gold, Black, Red, Silver (matte/gloss)', 12500.00, 5, 'uploads/products/6846d5ff648a2.png', '2026-01-07 12:39:27', '2026-01-07 12:39:27', 1, 1),
+(6, 3, 'RacingBoy 5-Spoke Alloy Mags ', '✔ Type: Lightweight Performance Wheels (Street & Racing Use)\r\n✔ PH Bike Compatibility:\r\n\r\nUnderbones: Yamaha Sniper 155, Mio i125/i125S, Honda RS150, Suzuki Raider 150\r\n\r\nSport Bikes: Yamaha R15 (V3/V4), Kawasaki Rouser NS200\r\n\r\nScooters: Aerox 155 (rear conversion only), Fazzio 125 (check fitment)\r\n\r\n✔ Key Features:\r\n\r\n5-spoke forged alloy – Aggressive design with high strength-to-weight ratio\r\n\r\nTubeless-ready – Improves safety & reduces puncture risks\r\n\r\nJ-Size Options: 1.60x17 / 1.85x17 / 2.15x17 (fits 70/90 to 110/90 tires)\r\n\r\nColors: Matte Black, Gold, Red, Silver', 13000.00, 6, 'uploads/products/6846d64918082.png', '2026-01-07 12:40:41', '2026-01-07 12:40:41', 0, 1),
+(7, 4, 'Motul Fully Syntethic Oil', '✔ Type: High-performance 100% synthetic engine oil (ester-based technology)\r\n✔ Best for PH Motorcycles:\r\n\r\nSmall Bikes (Underbones/Scoots): Mio i125, Click 125, PCX160, Aerox 155 (Motul 7100 10W-40)\r\n\r\nBig Bikes (400cc+): Ninja 400, Dominar 400, Z650 (Motul 300V 15W-50)\r\n\r\nHigh-Revving Sportbikes: Yamaha R15, R3, CBR150R (Motul 5100 15W-50)\r\n\r\n✔ Key Benefits for PH Riders:\r\n\r\nHeat resistance – Stays stable in PH traffic & long rides (Baguio to Batangas)\r\n\r\nEngine protection – Reduces wear on high-mileage bikes (ideal for Grab riders)\r\n\r\nSmoother shifts – Optimized for PH common wet-clutch systems', 950.00, 12, 'uploads/products/6846d702dd1aa.png', '2026-01-07 12:43:46', '2026-01-07 12:43:46', 1, 1),
+(8, 4, 'Petron Fully Syntethic Oil', '✔ Type: 100% Synthetic Engine Oil (API SN/JASO MA2 Certified)\r\n✔ PH Motorcycle Compatibility:\r\n\r\nUnderbones/Scooters: Mio i125, Click 125/160, PCX160, Aerox 155 (10W-40)\r\n\r\nSport Bikes: Yamaha R15, Suzuki Raider 150, Kawasaki Rouser NS200 (15W-50)\r\n\r\nBig Bikes: Dominar 400, Ninja 650 (20W-50 for high-temp protection)\r\n\r\n✔ Key Features for PH Riders:\r\n\r\nTraffic-ready – Superior heat resistance for stop-and-go Metro Manila rides\r\n\r\nWet-clutch safe – Prevents slippage in common PH bikes\r\n\r\nSludge prevention – Cleans old engine deposits (ideal for 2nd-hand bikes)', 600.00, 14, 'uploads/products/6846d7426af2d.png', '2026-01-07 12:44:50', '2026-01-07 12:44:50', 0, 1),
+(9, 4, 'Shell Fully Syntethic Oil', '✔ Type: 100% Synthetic Engine Oil (API SN+/JASO MA2 Certified)\r\n✔ PH Motorcycle Compatibility:\r\n\r\nUnderbones/Scooters: Mio i125, Click 125/160, PCX160, Aerox 155 (Shell Advance Ultra 10W-40)\r\n\r\nSport Bikes: Yamaha R15, Suzuki GSX-R150, Kawasaki Ninja 250 (Shell Advance Ultra 15W-50)\r\n\r\nBig Bikes: Dominar 400, CB650R (Shell Advance Ultra 20W-50)\r\n\r\n✔ Key Features for PH Riders:\r\n\r\nActive Cleansing Tech – Reduces engine deposits (ideal for old/taxi bikes)\r\n\r\nTriple Protection+ – Anti-wear, heat resistance & fuel efficiency\r\n\r\nWet-Clutch Optimized – Safe for PH\'s common manual-transmission bikes', 750.00, 13, 'uploads/products/6846d78bb144b.png', '2026-01-07 12:46:03', '2026-01-07 12:46:03', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -300,8 +302,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `role`, `status`, `created_at`, `updated_at`) VALUES
-(3, 'gilbert', '$2y$10$g8v1CgY5ktTzz3DrVWNDCeTrONsamJ.fpI8.QV2.iYl7UcdPWOTzO', 'gilberto@gmail.com', 'user', 'active', '2025-06-11 09:17:01', '2025-06-11 09:17:01'),
-(4, 'bobmarley', '$2y$10$Q6sPPSr/J96VYZS2q4GJo.dYvhVD7ta.760qjC4bCbOIruGKXapX.', 'bob@gmail.com', 'user', 'active', '2025-06-12 12:09:19', '2025-06-12 12:09:19');
+(3, 'gilbert', '$2y$10$g8v1CgY5ktTzz3DrVWNDCeTrONsamJ.fpI8.QV2.iYl7UcdPWOTzO', 'gilberto@gmail.com', 'user', 'active', '2026-01-10 09:17:01', '2026-01-10 09:17:01'),
+(4, 'bobmarley', '$2y$10$Q6sPPSr/J96VYZS2q4GJo.dYvhVD7ta.760qjC4bCbOIruGKXapX.', 'bob@gmail.com', 'user', 'active', '2026-01-11 12:09:19', '2026-01-11 12:09:19');
 
 -- --------------------------------------------------------
 
@@ -324,11 +326,11 @@ CREATE TABLE `variations` (
 --
 
 INSERT INTO `variations` (`id`, `product_id`, `variation`, `stock`, `price`, `is_active`, `created_at`) VALUES
-(1, 5, 'Gold', 2, NULL, 1, '2025-06-09 12:39:27'),
-(2, 5, 'Black', 3, NULL, 1, '2025-06-09 12:39:27'),
-(3, 5, 'Red', 4, NULL, 1, '2025-06-09 12:39:27'),
-(4, 5, 'Matte Silver', 3, NULL, 1, '2025-06-09 12:39:27'),
-(5, 5, 'Gloss Silver', 5, NULL, 1, '2025-06-09 12:39:27');
+(1, 5, 'Gold', 2, NULL, 1, '2026-01-07 12:39:27'),
+(2, 5, 'Black', 3, NULL, 1, '2026-01-07 12:39:27'),
+(3, 5, 'Red', 4, NULL, 1, '2026-01-07 12:39:27'),
+(4, 5, 'Matte Silver', 3, NULL, 1, '2026-01-07 12:39:27'),
+(5, 5, 'Gloss Silver', 5, NULL, 1, '2026-01-07 12:39:27');
 
 --
 -- Indexes for dumped tables
@@ -423,7 +425,7 @@ ALTER TABLE `variations`
 -- AUTO_INCREMENT for table `about_us`
 --
 ALTER TABLE `about_us`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `admin`

@@ -48,7 +48,7 @@ $variations = $var_stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="modern-card">
                     <div class="row g-0">
                         <div class="col-md-5">
-                            <div style="padding: var(--spacing-xl); background: var(--bg-primary); display: flex; align-items: center; justify-content: center; min-height: 400px; border-radius: var(--radius-lg) 0 0 var(--radius-lg);">
+                            <div style="padding: var(--spacing-xl); background: transparent; display: flex; align-items: center; justify-content: center; min-height: 400px; border-radius: var(--radius-lg) 0 0 var(--radius-lg);">
                                 <?php if ($product['image_url']): ?>
                                     <img src="<?php echo htmlspecialchars($product['image_url']); ?>" class="img-fluid" alt="<?php echo htmlspecialchars($product['name']); ?>" style="max-height: 400px; object-fit: contain;">
                                 <?php else: ?>
@@ -61,7 +61,7 @@ $variations = $var_stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="col-md-7">
                             <div style="padding: var(--spacing-2xl);">
                                 <h1 style="font-size: 2rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--spacing-md);"><?php echo htmlspecialchars($product['name']); ?></h1>
-                                <h2 style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary); margin-bottom: var(--spacing-xl);"><?php echo format_price($product['price']); ?></h2>
+                                <h2 style="font-size: 2.5rem; font-weight: 700; color: #000; margin-bottom: var(--spacing-xl);"><?php echo format_price($product['price']); ?></h2>
                                 
                                 <div style="display: flex; gap: var(--spacing-lg); margin-bottom: var(--spacing-lg); padding-bottom: var(--spacing-lg); border-bottom: 1px solid var(--border-primary);">
                                     <div>
@@ -79,7 +79,7 @@ $variations = $var_stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <p style="color: var(--text-secondary); line-height: 1.7;"><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>
                                 </div>
                                 
-                                <form id="product-action-form" method="POST" action="cart.php" style="margin-bottom: var(--spacing-lg);">
+                                <form id="product-action-form" class="add-to-cart-form" data-product-name="<?php echo htmlspecialchars($product['name']); ?>" style="margin-bottom: var(--spacing-lg);">
                                     <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
                                     <?php if (!empty($variations)): ?>
                                         <div style="margin-bottom: var(--spacing-md);">
@@ -103,29 +103,12 @@ $variations = $var_stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <input type="number" name="quantity" id="quantity" class="form-control" value="1" min="1" max="<?php echo $product['stock']; ?>" required style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 120px;">
                                     </div>
                                     <div style="display: flex; gap: var(--spacing-md); flex-wrap: wrap;">
-                                        <button type="submit" name="add_to_cart" class="modern-btn modern-btn-secondary" style="flex: 1; min-width: 150px;"><i class="bi bi-cart-plus me-2"></i>Add to Cart</button>
+                                        <button type="submit" class="modern-btn modern-btn-secondary" style="flex: 1; min-width: 150px;"><i class="bi bi-cart-plus me-2"></i>Add to Cart</button>
                                         <button type="button" id="buyNowBtn" class="modern-btn modern-btn-primary" style="flex: 1; min-width: 150px;">Buy Now</button>
                                     </div>
                                 </form>
                                 
                                 <a href="products.php" style="color: var(--text-secondary); text-decoration: none; font-size: 0.875rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: color var(--transition-fast);" onmouseover="this.style.color='var(--accent-primary)'" onmouseout="this.style.color='var(--text-secondary)'"><i class="bi bi-arrow-left"></i> Back to Products</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-                                <script>
-                                document.getElementById('buyNowBtn').addEventListener('click', function() {
-                                    var form = document.getElementById('product-action-form');
-                                    var variation = form.variation_id ? form.variation_id.value : '';
-                                    var quantity = form.quantity.value;
-                                    var url = 'buy_now.php?product_id=<?php echo $product['id']; ?>';
-                                    if (variation) url += '&variation_id=' + encodeURIComponent(variation);
-                                    url += '&quantity=' + encodeURIComponent(quantity);
-                                    window.location.href = url;
-                                });
-                                </script>
                             </div>
                         </div>
                     </div>
@@ -175,4 +158,188 @@ $variations = $var_stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
+
+    <!-- Cart Notification Popup -->
+    <div id="cartNotification" class="cart-notification">
+        <div class="cart-notification-content">
+            <i class="bi bi-check-circle-fill" style="font-size: 1.5rem; color: var(--success);"></i>
+            <div class="cart-notification-text">
+                <strong id="cartNotificationTitle">Added to Cart!</strong>
+                <p id="cartNotificationMessage">Product added successfully</p>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .cart-notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--success);
+            border-radius: var(--radius-lg);
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateX(400px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: none;
+            max-width: 350px;
+        }
+
+        .cart-notification.show {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+
+        .cart-notification-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .cart-notification-text {
+            flex: 1;
+        }
+
+        .cart-notification-text strong {
+            display: block;
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .cart-notification-text p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .cart-notification.error {
+            border-color: var(--danger);
+        }
+
+        .cart-notification.error .bi-check-circle-fill {
+            color: var(--danger);
+        }
+
+        .cart-notification.error .bi-check-circle-fill::before {
+            content: "\f623"; /* bi-x-circle-fill */
+        }
+
+        @keyframes cartBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .cart-bounce {
+            animation: cartBounce 0.3s ease-in-out;
+        }
+    </style>
+
+    <script>
+        // AJAX Add to Cart functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartForm = document.querySelector('.add-to-cart-form');
+            const cartNotification = document.getElementById('cartNotification');
+            const cartNotificationTitle = document.getElementById('cartNotificationTitle');
+            const cartNotificationMessage = document.getElementById('cartNotificationMessage');
+            const cartCountElement = document.getElementById('cart-count-badge');
+
+            if (cartForm) {
+                cartForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(cartForm);
+                    const productName = cartForm.dataset.productName;
+                    const submitButton = cartForm.querySelector('button[type="submit"]');
+                    const originalContent = submitButton.innerHTML;
+
+                    // Check if variation is required
+                    const variationSelect = cartForm.querySelector('select[name="variation_id"]');
+                    if (variationSelect && variationSelect.required && !variationSelect.value) {
+                        cartNotification.classList.add('error');
+                        cartNotificationTitle.textContent = 'Error';
+                        cartNotificationMessage.textContent = 'Please select a variation';
+                        showNotification();
+                        return;
+                    }
+
+                    // Disable button and show loading
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Adding...';
+
+                    fetch('ajax_add_to_cart.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Re-enable button
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = originalContent;
+
+                        if (data.success) {
+                            // Update cart count with animation
+                            if (cartCountElement) {
+                                cartCountElement.textContent = data.cart_count;
+                                cartCountElement.style.display = data.cart_count > 0 ? '' : 'none';
+                                cartCountElement.classList.add('cart-bounce');
+                                setTimeout(() => {
+                                    cartCountElement.classList.remove('cart-bounce');
+                                }, 300);
+                            }
+
+                            // Show success notification
+                            cartNotification.classList.remove('error');
+                            cartNotificationTitle.textContent = 'Added to Cart!';
+                            cartNotificationMessage.textContent = data.product_name;
+                            showNotification();
+                        } else {
+                            // Show error notification
+                            cartNotification.classList.add('error');
+                            cartNotificationTitle.textContent = 'Error';
+                            cartNotificationMessage.textContent = data.message || 'Failed to add to cart';
+                            showNotification();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = originalContent;
+                        
+                        // Show error notification
+                        cartNotification.classList.add('error');
+                        cartNotificationTitle.textContent = 'Error';
+                        cartNotificationMessage.textContent = 'Something went wrong';
+                        showNotification();
+                    });
+                });
+            }
+
+            function showNotification() {
+                cartNotification.classList.add('show');
+                setTimeout(() => {
+                    cartNotification.classList.remove('show');
+                    setTimeout(() => {
+                        cartNotification.classList.remove('error');
+                    }, 400);
+                }, 3000);
+            }
+
+            // Buy Now functionality
+            document.getElementById('buyNowBtn').addEventListener('click', function() {
+                var form = document.getElementById('product-action-form');
+                var variation = form.variation_id ? form.variation_id.value : '';
+                var quantity = form.quantity.value;
+                var url = 'buy_now.php?product_id=<?php echo $product['id']; ?>';
+                if (variation) url += '&variation_id=' + encodeURIComponent(variation);
+                url += '&quantity=' + encodeURIComponent(quantity);
+                window.location.href = url;
+            });
+        });
+    </script>
+
 <?php include 'includes/footer.php'; ?>

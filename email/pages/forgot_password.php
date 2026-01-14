@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="modern-container" style="padding-top: 4rem; padding-bottom: 4rem;">
         <div class="modern-card" style="max-width: 450px; margin: 0 auto; padding: var(--spacing-2xl);">
             <div style="text-align: center; margin-bottom: var(--spacing-xl);">
-                <div class="modern-logo-icon" style="width: 4rem; height: 4rem; margin: 0 auto var(--spacing-md); font-size: 2rem;">M</div>
+                <img src="../../uploads/logo/motologo.svg" alt="Motoshapi logo" class="modern-logo-img modern-logo-img-large" style="margin: 0 auto var(--spacing-md);">
                 <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: var(--spacing-sm);">Forgot Password</h2>
                 <p style="color: var(--text-secondary);">Enter your email to reset your password</p>
             </div>

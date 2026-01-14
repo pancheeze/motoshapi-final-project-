@@ -1,16 +1,44 @@
 <?php
+session_start();
+require_once 'config/database.php';
+require_once 'config/currency.php';
+
 $title = 'Reset Password - Motoshapi';
 $activePage = 'login';
-include '../../includes/header.php';
-
-require_once '../vendor/autoload.php';
+include 'includes/header.php';
+?>
+<style>
+    .auth-logo {
+        max-width: 80px;
+        height: auto;
+        display: block;
+        margin: 0 auto var(--spacing-md);
+        filter: brightness(0) saturate(100%);
+    }
+    .form-control {
+        border: 2px solid #000 !important;
+    }
+    .form-control:focus {
+        border-color: #000 !important;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+    }
+    .form-control.is-valid {
+        border-color: #28a745 !important;
+    }
+    .form-control.is-invalid {
+        border-color: #dc3545 !important;
+    }
+</style>
+<?php
+require_once 'email/vendor/autoload.php';
 
 $error = '';
 $success = '';
 $token = $_GET['token'] ?? '';
 
 if (empty($token)) {
-    header('Location: ../../email/pages/forgot_password.php');
+    header('Location: forgot_password.php');
     exit;
 }
 
@@ -47,7 +75,7 @@ if (!$user) {
     <div class="modern-container" style="padding-top: 4rem; padding-bottom: 4rem;">
         <div class="modern-card" style="max-width: 450px; margin: 0 auto; padding: var(--spacing-2xl);">
             <div style="text-align: center; margin-bottom: var(--spacing-xl);">
-                <div class="modern-logo-icon" style="width: 4rem; height: 4rem; margin: 0 auto var(--spacing-md); font-size: 2rem;">M</div>
+                <img src="uploads/logo/motologo.svg" alt="Motoshapi logo" class="auth-logo">
                 <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: var(--spacing-sm);">Reset Password</h2>
                 <p style="color: var(--text-secondary);">Enter your new password</p>
             </div>
@@ -79,8 +107,8 @@ if (!$user) {
 
             <div style="text-align: center; margin-top: var(--spacing-xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--border-primary);">
                 <span style="color: var(--text-secondary);">Remember your password? </span>
-                <a href="../../login.php" style="color: var(--accent-primary); text-decoration: none; font-weight: 600;">Sign In</a>
+                <a href="login.php" style="color: var(--accent-primary); text-decoration: none; font-weight: 600;">Sign In</a>
             </div>
         </div>
     </div>
-<?php include '../../includes/footer.php'; ?>
+<?php include 'includes/footer.php'; ?>

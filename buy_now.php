@@ -6,14 +6,6 @@ $product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
 $variation_id = isset($_GET['variation_id']) ? intval($_GET['variation_id']) : null;
 $quantity = isset($_GET['quantity']) ? max(1, intval($_GET['quantity'])) : 1;
 
-// Redirect to checkout.php with buy_now=1 and product details
-$query = 'checkout.php?buy_now=1&product_id=' . $product_id . '&quantity=' . $quantity;
-if ($variation_id) {
-    $query .= '&variation_id=' . $variation_id;
-}
-header('Location: ' . $query);
-exit();
-
 // Fetch product and variation info
 $stmt = $conn->prepare('SELECT * FROM products WHERE id = ?');
 $stmt->execute([$product_id]);
@@ -43,7 +35,7 @@ if ($product && $item_stock >= $quantity) {
         'variation_id' => $variation_id,
         'variation' => $variation ? $variation['variation'] : null
     ];
-    header('Location: checkout.php');
+    header('Location: cart.php');
     exit();
 } else {
     $_SESSION['error'] = 'Product not available or insufficient stock.';

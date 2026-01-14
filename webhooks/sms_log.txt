@@ -139,3 +139,10 @@
   "receivedStamp":1768198148298,
   "sim":"sim1"
 }
+[2026-01-14 12:59:01] {
+  "from":"123456789",
+  "text":"salamat",
+  "sentStamp":1768391942262,
+  "receivedStamp":1768391942264,
+  "sim":"sim1"
+}

@@ -5,160 +5,234 @@ require_once 'config/currency.php';
 
 $title = 'Motoshapi - Motorcycle Parts';
 $activePage = 'home';
+$uiTheme = 'spare';
+$bodyClass = 'bg-light sp-landing-idle';
 $mainClass = 'flex-grow-1 p-0';
-$renderGlobalFooter = false;
 include 'includes/header.php';
 ?>
 
-    <!-- Modern Hero Section -->
-    <div class="modern-hero">
-        <div class="modern-hero-overlay"></div>
-        <div id="heroSlideshow" class="carousel slide h-100" data-bs-ride="carousel" data-bs-interval="4000">
-            <div class="carousel-inner h-100">
-                <div class="carousel-item active h-100">
-                    <img src="uploads/slideshow/image1.jpeg" class="d-block w-100 h-100" style="object-fit: cover;" alt="Slide 1">
-                </div>
-                <div class="carousel-item h-100">
-                    <img src="uploads/slideshow/image2.jpeg" class="d-block w-100 h-100" style="object-fit: cover;" alt="Slide 2">
-                </div>
-                <div class="carousel-item h-100">
-                    <img src="uploads/slideshow/image3.jpeg" class="d-block w-100 h-100" style="object-fit: cover;" alt="Slide 3">
-                </div>
-                <div class="carousel-item h-100">
-                    <img src="uploads/slideshow/image4.jpeg" class="d-block w-100 h-100" style="object-fit: cover;" alt="Slide 4">
-                </div>
-                <div class="carousel-item h-100">
-                    <img src="uploads/slideshow/image5.jpg" class="d-block w-100 h-100" style="object-fit: cover;" alt="Slide 5">
-                </div>
+<?php
+// Categories for tiles
+$tile_categories_stmt = $conn->query(
+    "SELECT c.*, 
+            COUNT(p.id) AS product_count,
+            (SELECT p2.image_url FROM products p2 
+                WHERE p2.category_id = c.id AND p2.image_url IS NOT NULL AND p2.image_url <> '' 
+                ORDER BY p2.created_at DESC 
+                LIMIT 1) AS tile_image
+     FROM categories c
+     LEFT JOIN products p ON p.category_id = c.id
+     GROUP BY c.id
+     ORDER BY product_count DESC, c.name ASC
+     LIMIT 3"
+);
+$tileCategories = $tile_categories_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Featured products (falls back to newest active products)
+$featuredProducts = [];
+try {
+    $featured_stmt = $conn->query(
+        "SELECT id, name, price, stock, image_url FROM products WHERE is_active = 1 AND featured = 1 ORDER BY updated_at DESC, created_at DESC LIMIT 4"
+    );
+    $featuredProducts = $featured_stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Throwable $e) {
+    $featuredProducts = [];
+}
+
+if (empty($featuredProducts)) {
+    try {
+        $fallback_stmt = $conn->query(
+            "SELECT id, name, price, stock, image_url FROM products WHERE is_active = 1 ORDER BY (stock > 0) DESC, created_at DESC LIMIT 4"
+        );
+        $featuredProducts = $fallback_stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Throwable $e) {
+        $featuredProducts = [];
+    }
+}
+?>
+
+<section class="sp-landing sp-landing--fullscreen" aria-label="Hero">
+    <div class="sp-landing-video" aria-hidden="true">
+        <video autoplay muted loop playsinline preload="metadata">
+            <source src="uploads/hero/hero.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="sp-landing-overlay" aria-hidden="true"></div>
+    <div class="sp-container">
+        <div class="sp-landing-content">
+            <div class="sp-landing-kicker">motoshapi</div>
+            <h1 class="sp-landing-title">Ride ready. Parts that perform.</h1>
+            <div class="sp-landing-sub">Quality motorcycle parts and accessories—picked for riders who care about performance and reliability.</div>
+            <div class="sp-landing-actions">
+                <a href="products.php" class="sp-hero-cta">Shop now <i class="bi bi-chevron-right"></i></a>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#heroSlideshow" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#heroSlideshow" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#heroSlideshow" data-bs-slide-to="0" class="active"></button>
-                <button type="button" data-bs-target="#heroSlideshow" data-bs-slide-to="1"></button>
-                <button type="button" data-bs-target="#heroSlideshow" data-bs-slide-to="2"></button>
-                <button type="button" data-bs-target="#heroSlideshow" data-bs-slide-to="3"></button>
-                <button type="button" data-bs-target="#heroSlideshow" data-bs-slide-to="4"></button>
-            </div>
-        </div>
-        <div class="modern-hero-content">
-            <h1 class="modern-hero-title">Premium <span class="modern-accent-text">Parts</span> for Every Rider</h1>
-            <p class="modern-hero-subtitle">Driven by Parts. Built for Performance.</p>
-            <a href="products.php" class="modern-btn modern-btn-primary modern-btn-lg">Shop Now</a>
         </div>
     </div>
+</section>
 
-    <!-- Main Content -->
-    <div class="modern-container modern-section">
-        <!-- Welcome Section -->
-        <div style="text-align: center; max-width: 800px; margin: 0 auto var(--spacing-2xl);">
-            <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: var(--spacing-md);">Welcome to Motoshapi</h2>
-            <p style="font-size: 1.125rem; color: var(--text-secondary); margin-bottom: var(--spacing-md);">Your one-stop shop for premium motorcycle parts and accessories.</p>
-            <hr style="border-color: var(--border-primary); margin: var(--spacing-lg) auto; max-width: 200px;">
-            <p style="color: var(--text-muted);">Browse our extensive collection of high-quality motorcycle parts designed for performance and durability.</p>
-        </div>
+<div class="sp-main">
+    <div class="sp-container">
 
-        <!-- Featured Products -->
-        <h2 class="modern-section-title">Featured <span class="modern-accent-text">Products</span></h2>
-        <div id="featuredCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-            <div class="carousel-inner">
-                <?php
-                $stmt = $conn->query("SELECT * FROM products WHERE featured = 1 ORDER BY created_at DESC LIMIT 4");
-                $active = true;
-                while($product = $stmt->fetch(PDO::FETCH_ASSOC)):
-                ?>
-                <div class="carousel-item<?php if($active){echo ' active'; $active = false;} ?>">
-                    <div class="d-flex justify-content-center">
-                        <div class="modern-card" style="width: 100%; max-width: 400px;">
-                            <div style="position: relative; overflow: hidden;">
-                                <a href="product.php?id=<?php echo $product['id']; ?>">
-                                    <img src="<?php echo htmlspecialchars($product['image_url']); ?>" class="modern-card-img" alt="<?php echo htmlspecialchars($product['name']); ?>">
-                                </a>
-                                <span class="modern-card-badge" style="position: absolute; top: 1rem; right: 1rem;">Featured</span>
+        <section class="sp-hero">
+            <div class="sp-hero-grid">
+                <div class="sp-hero-copy">
+                    <div class="sp-hero-kicker">featured products</div>
+                    <h1 class="sp-hero-title">Featured</h1>
+                    <div class="sp-hero-sub">Hand-picked parts and accessories our riders love.</div>
+                    <a href="products.php" class="sp-hero-cta">Browse products <i class="bi bi-chevron-right"></i></a>
+                </div>
+
+                <div class="sp-hero-media">
+                    <div class="sp-hero-featured" aria-label="Featured products">
+                        <?php if (empty($featuredProducts)): ?>
+                            <div class="sp-hero-featured-empty">
+                                <div style="font-weight: 900; letter-spacing: .08em; text-transform: uppercase; font-size: 12px;">Featured products</div>
+                                <div style="margin-top: 6px;">No products available right now.</div>
                             </div>
-                            <div class="modern-card-body">
-                                <h3 class="modern-card-title">
-                                    <a href="product.php?id=<?php echo $product['id']; ?>"><?php echo htmlspecialchars($product['name']); ?></a>
-                                </h3>
-                                <p class="modern-card-price"><?php echo format_price($product['price']); ?></p>
-                                <a href="product.php?id=<?php echo $product['id']; ?>" class="modern-btn modern-btn-primary" style="width: 100%;">View Details</a>
+                        <?php else: ?>
+                            <div id="featuredProductsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4500" data-bs-touch="true" data-bs-pause="false">
+                                <div class="carousel-indicators">
+                                    <?php foreach ($featuredProducts as $i => $product): ?>
+                                        <button type="button"
+                                                data-bs-target="#featuredProductsCarousel"
+                                                data-bs-slide-to="<?php echo (int)$i; ?>"
+                                                class="<?php echo $i === 0 ? 'active' : ''; ?>"
+                                                <?php if ($i === 0): ?>aria-current="true"<?php endif; ?>
+                                                aria-label="Featured product <?php echo (int)($i + 1); ?>"></button>
+                                    <?php endforeach; ?>
+                                </div>
+
+                                <div class="carousel-inner">
+                                    <?php foreach ($featuredProducts as $i => $product): ?>
+                                        <div class="carousel-item<?php echo $i === 0 ? ' active' : ''; ?>">
+                                            <div class="sp-featured-slide">
+                                                <a class="sp-featured-slide-media" href="product.php?id=<?php echo urlencode((string)$product['id']); ?>" aria-label="View <?php echo htmlspecialchars($product['name']); ?>">
+                                                    <?php if (!empty($product['image_url'])): ?>
+                                                        <img src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+                                                    <?php else: ?>
+                                                        <i class="bi bi-image" style="font-size: 3rem; color: rgba(0,0,0,.35);"></i>
+                                                    <?php endif; ?>
+                                                </a>
+                                                <div class="sp-featured-slide-body">
+                                                    <div class="sp-featured-slide-title">
+                                                        <a href="product.php?id=<?php echo urlencode((string)$product['id']); ?>"><?php echo htmlspecialchars($product['name']); ?></a>
+                                                    </div>
+                                                    <div class="sp-featured-slide-meta">
+                                                        <div class="sp-featured-slide-price"><?php echo format_price($product['price']); ?></div>
+                                                        <div class="sp-featured-slide-stock <?php echo ((int)($product['stock'] ?? 0)) > 0 ? 'in' : 'out'; ?>">
+                                                            <?php echo ((int)($product['stock'] ?? 0)) > 0 ? 'In stock' : 'Out of stock'; ?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sp-tiles" aria-label="Shop categories">
+            <?php if (empty($tileCategories)): ?>
+                <div class="sp-tile">
+                    <div class="sp-tile-body">
+                        <h3 class="sp-tile-title">Categories</h3>
+                        <a class="sp-tile-link" href="products.php">Shop now <i class="bi bi-chevron-right"></i></a>
+                    </div>
+                </div>
+            <?php else: ?>
+                <?php foreach ($tileCategories as $cat): ?>
+                    <?php
+                        $tileHref = 'products.php?category_id=' . urlencode((string)$cat['id']);
+                        $tileImg = !empty($cat['tile_image']) ? $cat['tile_image'] : '';
+                    ?>
+                    <div class="sp-tile">
+                        <div class="sp-tile-media">
+                            <?php if ($tileImg !== ''): ?>
+                                <img src="<?php echo htmlspecialchars($tileImg); ?>" alt="<?php echo htmlspecialchars($cat['name']); ?>">
+                            <?php else: ?>
+                                <div class="sp-tile-placeholder" aria-hidden="true">
+                                    <i class="bi bi-grid-3x3-gap" style="font-size: 2.2rem;"></i>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="sp-tile-body">
+                            <h3 class="sp-tile-title"><?php echo htmlspecialchars($cat['name']); ?></h3>
+                            <a class="sp-tile-link" href="<?php echo htmlspecialchars($tileHref); ?>">Shop now <i class="bi bi-chevron-right"></i></a>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </section>
+
+        <section id="about" class="sp-surface" style="margin-top: 16px;">
+            <div class="p-4">
+                <div class="sp-section-title">About</div>
+                <div style="color: var(--sp-text-muted); max-width: 980px;">
+                    <p style="margin: 0 0 10px;">
+                        Motoshapi is your trusted online shop for quality motorcycle parts and accessories.
+                        We focus on providing reliable products, clear pricing, and a smooth shopping experience—whether you're maintaining a daily ride or upgrading your build.
+                    </p>
+                    <p style="margin: 0 0 12px;">
+                        Browse categories, discover featured picks, and check product availability before you buy.
+                        Every item includes details and pricing to help you choose the right part with confidence.
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px;">
+                        <div style="border: 1px solid var(--sp-border); background: #fff; padding: 12px;">
+                            <div style="font-weight: 900; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; margin-bottom: 6px;">Quality parts</div>
+                            <div>Motor oils, tires, mags, and more—ready for everyday riders and enthusiasts.</div>
+                        </div>
+                        <div style="border: 1px solid var(--sp-border); background: #fff; padding: 12px;">
+                            <div style="font-weight: 900; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; margin-bottom: 6px;">Real stock info</div>
+                            <div>See what’s in stock and shop with less guesswork.</div>
+                        </div>
+                        <div style="border: 1px solid var(--sp-border); background: #fff; padding: 12px;">
+                            <div style="font-weight: 900; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; margin-bottom: 6px;">Easy ordering</div>
+                            <div>Add to cart, checkout, and track your orders in one place.</div>
                         </div>
                     </div>
                 </div>
-                <?php endwhile; ?>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#featuredCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#featuredCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
+        </section>
+
     </div>
+</div>
 
-    <!-- Footer -->
-    <footer class="modern-footer">
-        <div class="modern-container">
-            <div class="d-flex justify-content-center align-items-center flex-column flex-md-row gap-3">
-                <p class="mb-0" style="color: var(--text-secondary);">&copy; 2024 Motoshapi. All rights reserved.</p>
-                <button id="aboutUsBtn" class="modern-btn modern-btn-secondary">About Us</button>
-            </div>
-        </div>
-    </footer>
+<script>
+    (function () {
+        const landing = document.querySelector('.sp-landing--fullscreen');
+        if (!landing) return;
 
-        <!-- About Us Modal -->
-        <div class="modal fade" id="aboutUsModal" tabindex="-1" aria-labelledby="aboutUsModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-centered">
-                <div class="modal-content" style="background: var(--bg-secondary); border: 1px solid var(--border-primary);">
-                  <div class="modal-header" style="border-bottom: 1px solid var(--border-primary);">
-                    <h2 class="modal-title w-100 text-center" id="aboutUsModalLabel" style="color: var(--text-primary);">About Us</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="row justify-content-center gx-5">
-                      <?php
-                      $about_stmt = $conn->query("SELECT * FROM about_us ORDER BY id ASC");
-                      while($member = $about_stmt->fetch(PDO::FETCH_ASSOC)):
-                      ?>
-                      <div class="col-md-4 col-lg-3 mb-4 d-flex justify-content-center">
-                        <div class="modern-card text-center" style="min-width:280px; padding:25px; margin: 0 15px;">
-                          <?php if($member['photo_url']): ?>
-                            <img src="<?php echo htmlspecialchars($member['photo_url']); ?>" class="mx-auto d-block rounded-circle" alt="<?php echo htmlspecialchars($member['name']); ?>" style="width:200px; height:200px; object-fit:cover; margin-bottom:20px; border: 3px solid var(--accent-primary);">
-                          <?php else: ?>
-                            <div class="mx-auto d-flex align-items-center justify-content-center rounded-circle" style="width:200px; height:200px; margin-bottom:20px; background: var(--bg-tertiary); color: var(--text-secondary); font-size: 4rem; font-weight: 700;">?</div>
-                          <?php endif; ?>
-                          <div class="px-3">
-                            <h4 class="fw-bold mb-3" style="color: var(--text-primary);"><?php echo htmlspecialchars($member['name']); ?></h4>
-                            <p class="mb-2" style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;"><?php echo htmlspecialchars($member['description']); ?></p>
-                          </div>
-                        </div>
-                      </div>
-                      <?php endwhile; ?>
-                    </div>
-                  </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        // Safety: ensure idle state even if server-side class is removed.
+        document.body.classList.add('sp-landing-idle');
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        var aboutUsBtn = document.getElementById('aboutUsBtn');
-        var aboutUsModal = new bootstrap.Modal(document.getElementById('aboutUsModal'));
-        if (aboutUsBtn) {
-            aboutUsBtn.addEventListener('click', function() {
-              aboutUsModal.show();
-            });
-        }
-      });
-    </script>
-    <?php include 'includes/footer.php'; ?>
+        let activated = false;
+        const activate = () => {
+            if (activated) return;
+            activated = true;
+            document.body.classList.remove('sp-landing-idle');
+            document.body.classList.add('sp-landing-active');
+            cleanup();
+        };
+
+        const onPointer = () => activate();
+        const onKey = (e) => {
+            if (!e) return activate();
+            if (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') activate();
+        };
+        const onScroll = () => activate();
+
+        const cleanup = () => {};
+
+        window.addEventListener('pointerdown', onPointer, { passive: true, once: true });
+        window.addEventListener('touchstart', onPointer, { passive: true, once: true });
+        window.addEventListener('keydown', onKey, { once: true });
+        window.addEventListener('scroll', onScroll, { passive: true, once: true });
+    })();
+</script>
+
+<?php include 'includes/footer.php'; ?>
