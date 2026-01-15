@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-require_once 'config/database.php';
+require_once 'config/connect.php';
 require_once 'config/currency.php';
 
 $uiTheme = isset($uiTheme) && $uiTheme !== '' ? $uiTheme : 'spare';
@@ -40,20 +40,28 @@ if (!empty($_SESSION['cart'])) {
     <div class="d-flex flex-column min-vh-100">
         <?php if ($uiTheme === 'spare'): ?>
             <header class="sp-header">
-                <div class="sp-container">
-                    <div class="sp-header-row">
-                        <a href="index.php" class="sp-brand">
+                <nav class="navbar navbar-expand-lg sp-navbar">
+                    <div class="sp-container container-fluid">
+                        <a href="index.php" class="navbar-brand sp-brand">
                             <img src="uploads/logo/motologo.svg" alt="Motoshapi logo">
                             <span class="sp-brand-text">motoshapi</span>
                         </a>
 
-                        <nav class="sp-nav" aria-label="Primary">
-                            <a href="index.php" class="<?php echo ($activePage ?? '') === 'home' ? 'active' : ''; ?>">Home</a>
-                            <a href="products.php" class="<?php echo ($activePage ?? '') === 'products' ? 'active' : ''; ?>">Shop</a>
-                            <a href="orders.php" class="<?php echo ($activePage ?? '') === 'orders' ? 'active' : ''; ?>">My Orders</a>
-                        </nav>
+                        <div class="collapse navbar-collapse" id="spMobileNav">
+                            <ul class="navbar-nav ms-lg-auto sp-nav-list">
+                                <li class="nav-item">
+                                    <a href="index.php" class="nav-link sp-nav-link <?php echo ($activePage ?? '') === 'home' ? 'active' : ''; ?>">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="products.php" class="nav-link sp-nav-link <?php echo ($activePage ?? '') === 'products' ? 'active' : ''; ?>">Shop</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="orders.php" class="nav-link sp-nav-link <?php echo ($activePage ?? '') === 'orders' ? 'active' : ''; ?>">My Orders</a>
+                                </li>
+                            </ul>
+                        </div>
 
-                        <div class="sp-actions">
+                        <div class="sp-actions ms-lg-3">
                             <a href="cart.php" class="sp-icon-btn" title="Cart">
                                 <i class="bi bi-cart" style="font-size: 1.1rem;"></i>
                                 <span class="sp-badge" id="cart-count-badge" style="<?php echo $cart_count == 0 ? 'display: none;' : ''; ?>"><?php echo $cart_count; ?></span>
@@ -63,29 +71,32 @@ if (!empty($_SESSION['cart'])) {
                             <?php else: ?>
                                 <a href="login.php" class="sp-icon-btn" title="Login"><i class="bi bi-person" style="font-size: 1.1rem;"></i></a>
                             <?php endif; ?>
+                            <button class="navbar-toggler sp-navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#spMobileNav" aria-controls="spMobileNav" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
                         </div>
                     </div>
-                </div>
+                </nav>
             </header>
         <?php else: ?>
             <!-- Modern Navigation -->
-            <nav class="modern-navbar">
-                <div class="modern-navbar-container">
+            <nav class="navbar navbar-expand-lg modern-navbar">
+                <div class="modern-navbar-container container-fluid">
                     <!-- Logo -->
-                    <a href="index.php" class="modern-logo">
+                    <a href="index.php" class="navbar-brand modern-logo">
                         <img src="uploads/logo/motologo.svg" alt="Motoshapi logo" class="modern-logo-img" />
                         <span>MOTOSHAPI</span>
                     </a>
 
-                    <!-- Desktop Navigation Links -->
-                    <ul class="modern-nav-links d-none d-lg-flex">
-                        <li><a href="index.php" class="modern-nav-link<?php echo ($activePage ?? '') === 'home' ? ' active' : ''; ?>">Home</a></li>
-                        <li><a href="products.php" class="modern-nav-link<?php echo ($activePage ?? '') === 'products' ? ' active' : ''; ?>">Products</a></li>
-                        <li><a href="orders.php" class="modern-nav-link<?php echo ($activePage ?? '') === 'orders' ? ' active' : ''; ?>">My Orders</a></li>
-                    </ul>
+                    <div class="collapse navbar-collapse" id="modernMobileNav">
+                        <ul class="navbar-nav ms-lg-auto modern-nav-links">
+                            <li class="nav-item"><a href="index.php" class="nav-link modern-nav-link<?php echo ($activePage ?? '') === 'home' ? ' active' : ''; ?>">Home</a></li>
+                            <li class="nav-item"><a href="products.php" class="nav-link modern-nav-link<?php echo ($activePage ?? '') === 'products' ? ' active' : ''; ?>">Shop</a></li>
+                            <li class="nav-item"><a href="orders.php" class="nav-link modern-nav-link<?php echo ($activePage ?? '') === 'orders' ? ' active' : ''; ?>">My Orders</a></li>
+                        </ul>
+                    </div>
 
-                    <!-- Actions -->
-                    <div class="modern-nav-actions">
+                    <div class="modern-nav-actions ms-lg-3">
                         <!-- Cart -->
                         <a href="cart.php" class="modern-icon-btn">
                             <i class="bi bi-cart" style="font-size: 1.25rem;"></i>
@@ -105,6 +116,9 @@ if (!empty($_SESSION['cart'])) {
                                 <i class="bi bi-person" style="font-size: 1.25rem;"></i>
                             </a>
                         <?php endif; ?>
+                        <button class="navbar-toggler modern-navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#modernMobileNav" aria-controls="modernMobileNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
                     </div>
                 </div>
             </nav>

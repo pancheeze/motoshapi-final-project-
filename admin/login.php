@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/database.php';
+require_once '../config/connect.php';
 
 if(isset($_SESSION['admin_id'])) {
     header("Location: index.php");

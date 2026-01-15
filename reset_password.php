@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config/database.php';
+require_once 'config/connect.php';
 require_once 'config/currency.php';
 
 $title = 'Reset Password - Motoshapi';
@@ -87,8 +87,12 @@ if (!$user) {
             <?php endif; ?>
             <?php if($success): ?>
                 <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); color: var(--success); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-lg);">
-                    <?php echo $success; ?>
+                    <strong>✓ Password reset successfully!</strong><br>
+                    You can now login with your new password.
                 </div>
+                <a href="login.php" class="modern-btn modern-btn-primary" style="width: 100%; padding: 0.875rem; font-size: 1.0625rem; text-align: center; display: block; text-decoration: none; margin-top: var(--spacing-md);">
+                    Login Now
+                </a>
             <?php endif; ?>
 
             <?php if(!$success && $user): ?>

@@ -255,7 +255,7 @@ function sendOrderConfirmationEmail($email, $orderData) {
 function sendPasswordResetEmail($email, $resetToken) {
     $subject = 'Password Reset Request - Motoshapi';
 
-    $resetLink = "http://localhost/motoshapi/email/pages/reset_password.php?token=" . urlencode($resetToken);
+    $resetLink = "http://localhost/motoshapi/reset_password.php?token=" . urlencode($resetToken);
 
     $body = "
     <html>

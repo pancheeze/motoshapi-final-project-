@@ -8,7 +8,7 @@
  * Run this file once by accessing: http://localhost/MOTOSHAPI/database/create_sms_logs_table.php
  */
 
-require_once '../config/database.php';
+require_once '../config/connect.php';
 
 try {
     // Check if table already exists

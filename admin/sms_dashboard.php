@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/database.php';
+require_once '../config/connect.php';
 require_once '../config/currency.php';
 require_once '../config/sms_config.php';
 require_once '../includes/sms_helper.php';

@@ -6,7 +6,7 @@
  * and logging SMS activity to the database.
  */
 
-require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/connect.php';
 require_once __DIR__ . '/../config/sms_config.php';
 
 /**

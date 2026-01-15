@@ -84,9 +84,14 @@
         <div id="ms-chatbot-panel" class="ms-chatbot-panel" hidden>
             <div class="ms-chatbot-header">
                 <div class="ms-chatbot-title">Motoshapi Assistant</div>
-                <button id="ms-chatbot-close" class="ms-chatbot-close" type="button" title="Close">
-                    <i class="bi bi-x-lg"></i>
-                </button>
+                <div class="ms-chatbot-header-actions">
+                    <button id="ms-chatbot-faq" class="ms-chatbot-faq" type="button" title="FAQ">
+                        FAQ
+                    </button>
+                    <button id="ms-chatbot-close" class="ms-chatbot-close" type="button" title="Close">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
             </div>
             <div id="ms-chatbot-messages" class="ms-chatbot-messages"></div>
             <form id="ms-chatbot-form" class="ms-chatbot-form" autocomplete="off">

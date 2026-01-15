@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config/database.php';
+require_once 'config/connect.php';
 require_once 'config/currency.php';
 
 $product_id_php = isset($_GET['id']) ? $_GET['id'] : null;

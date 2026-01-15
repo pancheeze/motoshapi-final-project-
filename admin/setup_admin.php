@@ -1,5 +1,5 @@
 <?php
-require_once '../config/database.php';
+require_once '../config/connect.php';
 
 // Default admin credentials
 $default_admin = [

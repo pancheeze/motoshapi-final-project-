@@ -58,8 +58,9 @@ function ms_is_site_related_message(string $text): bool {
         'login', 'log in', 'signin', 'sign in', 'register', 'sign up', 'signup', 'profile', 'account',
         'password', 'forgot', 'reset',
         'stock', 'available', 'variation', 'size', 'color',
-        'featured', 'category', 'categories'
-        ,
+        'featured', 'category', 'categories',
+        // FAQ related
+        'faq', 'faqs', 'frequently asked', 'common questions', 'help', 'question', 'questions',
         // Admin + site features
         'admin', 'dashboard', 'settings',
         'sms', 'email', 'notification',
@@ -88,7 +89,7 @@ if (!ms_is_site_related_message($message)) {
     exit;
 }
 
-require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/config/connect.php';
 require_once __DIR__ . '/config/currency.php';
 
 function ms_env_bool(string $key, bool $default = false): bool {
@@ -400,6 +401,136 @@ function ms_order_help_reply(): string {
         "If you have an order number, share it and I can guide you where to find it in the Orders page.";
 }
 
+// ===== FAQ Functions =====
+function ms_is_faq_question(string $text): bool {
+    $t = mb_strtolower(trim($text), 'UTF-8');
+    if ($t === '') return false;
+    
+    $needles = [
+        'faq', 'faqs', 'frequently asked', 'common questions',
+        'what can you help', 'what can i ask', 'how can you help',
+        'what do you do', 'what can you do', 'help me',
+        'show me faq', 'show faq', 'list faq', 'questions'
+    ];
+    
+    foreach ($needles as $n) {
+        if (str_contains($t, $n)) return true;
+    }
+    
+    // Match exact "help" standalone
+    if ($t === 'help' || $t === '?' || $t === 'help me') {
+        return true;
+    }
+    
+    return false;
+}
+
+function ms_get_faq_list(): array {
+    return [
+        [
+            'question' => 'How do I place an order?',
+            'answer' => "To place an order:\n1. Browse products and click 'Add to Cart'\n2. Go to Cart and review items\n3. Click 'Checkout'\n4. Fill in shipping details\n5. Choose payment method (COD or PayPal)\n6. Confirm your order!"
+        ],
+        [
+            'question' => 'What payment methods do you accept?',
+            'answer' => "We accept:\n• Cash on Delivery (COD) - Pay when you receive\n• PayPal - Secure online payment\n\nPayment methods may vary. Check checkout for available options."
+        ],
+        [
+            'question' => 'How can I track my order?',
+            'answer' => "To track your order:\n1. Log in to your account\n2. Go to 'My Orders'\n3. View order status and details\n\nYou'll also receive SMS notifications about your order status."
+        ],
+        [
+            'question' => 'How do I reset my password?',
+            'answer' => "To reset your password:\n1. Go to the login page\n2. Click 'Forgot Password'\n3. Enter your email address\n4. Check your email for reset link\n5. Create a new password"
+        ],
+        [
+            'question' => 'How do I create an account?',
+            'answer' => "To create an account:\n1. Click 'Register' or the person icon\n2. Fill in your username, email, and password\n3. Add your phone number (optional)\n4. Click 'Sign Up'\n\nYou can now shop and track orders!"
+        ],
+        [
+            'question' => 'What are featured products?',
+            'answer' => "Featured products are our top picks and best sellers. They appear on the homepage and are handpicked for quality and popularity. Check them out for great deals!"
+        ],
+        [
+            'question' => 'How do I check product stock?',
+            'answer' => "You can check stock by:\n1. Viewing the product page (shows stock count)\n2. Asking me! Just say: 'stock of [product name]'\n\nExample: 'stock of Motul oil'"
+        ],
+        [
+            'question' => 'Do you offer refunds or returns?',
+            'answer' => "For returns and refunds:\n• Contact us within 7 days of delivery\n• Product must be unused and in original packaging\n• Defective items will be replaced\n\nContact our support for assistance."
+        ],
+        [
+            'question' => 'How long does delivery take?',
+            'answer' => "Delivery times vary by location:\n• Metro Manila: 2-3 business days\n• Provincial: 5-7 business days\n\nYou'll receive SMS updates on your delivery status."
+        ],
+        [
+            'question' => 'How do I contact support?',
+            'answer' => "You can reach us by:\n• Using this chatbot for quick answers\n• Checking the 'About Us' section\n• Sending us a message through SMS\n\nWe're here to help!"
+        ]
+    ];
+}
+
+function ms_get_faq_menu_reply(): string {
+    $faqs = ms_get_faq_list();
+    $lines = ["📋 **Frequently Asked Questions**\n\nHere are common questions I can help with:\n"];
+    
+    foreach ($faqs as $i => $faq) {
+        $num = $i + 1;
+        $lines[] = "{$num}. {$faq['question']}";
+    }
+    
+    $lines[] = "\n💡 **Tip:** Ask me any of these questions, or type a number (1-" . count($faqs) . ") for the answer!";
+    $lines[] = "\nYou can also ask about: products, prices, stock, categories, checkout, or orders.";
+    
+    return implode("\n", $lines);
+}
+
+function ms_is_faq_number_question(string $text): bool {
+    $t = trim($text);
+    // Check if it's just a number 1-10
+    return preg_match('/^[1-9]$|^10$/', $t) === 1;
+}
+
+function ms_get_faq_by_number(int $num): ?string {
+    $faqs = ms_get_faq_list();
+    $index = $num - 1;
+    
+    if (isset($faqs[$index])) {
+        return "**{$faqs[$index]['question']}**\n\n{$faqs[$index]['answer']}";
+    }
+    
+    return null;
+}
+
+function ms_match_faq_question(string $text): ?string {
+    $t = mb_strtolower(trim($text), 'UTF-8');
+    $faqs = ms_get_faq_list();
+    
+    // Keywords to match each FAQ
+    $matchers = [
+        0 => ['place order', 'how to order', 'ordering', 'make order', 'buy something'],
+        1 => ['payment method', 'payment options', 'how to pay', 'accept payment', 'cod', 'paypal', 'pay'],
+        2 => ['track order', 'order status', 'where is my order', 'order tracking', 'my order'],
+        3 => ['reset password', 'forgot password', 'change password', 'lost password'],
+        4 => ['create account', 'sign up', 'register', 'new account', 'registration'],
+        5 => ['featured product', 'best seller', 'recommended', 'popular'],
+        6 => ['check stock', 'product stock', 'availability', 'in stock'],
+        7 => ['refund', 'return', 'exchange', 'money back'],
+        8 => ['delivery time', 'shipping time', 'how long', 'when will'],
+        9 => ['contact', 'support', 'help', 'customer service', 'reach you']
+    ];
+    
+    foreach ($matchers as $index => $keywords) {
+        foreach ($keywords as $kw) {
+            if (str_contains($t, $kw) && isset($faqs[$index])) {
+                return "**{$faqs[$index]['question']}**\n\n{$faqs[$index]['answer']}";
+            }
+        }
+    }
+    
+    return null;
+}
+
 function ms_get_site_map_text(): string {
     // Keep this short and non-sensitive; do not include any credentials.
     return "Site pages (quick guide):\n" .
@@ -671,6 +802,41 @@ function ms_get_product_stock_reply(PDO $conn, string $query): string {
 
 if (!isset($_SESSION['chat_history']) || !is_array($_SESSION['chat_history'])) {
     $_SESSION['chat_history'] = [];
+}
+
+// FAQ handling - check first for FAQ menu or specific FAQ questions
+if (ms_is_faq_question($message)) {
+    $reply = ms_get_faq_menu_reply();
+    $_SESSION['chat_history'][] = ['role' => 'user', 'content' => $message];
+    $_SESSION['chat_history'][] = ['role' => 'assistant', 'content' => $reply];
+    $_SESSION['chat_history'] = array_slice($_SESSION['chat_history'], -24);
+    echo json_encode(['reply' => $reply]);
+    exit;
+}
+
+// FAQ number selection (1-10)
+if (ms_is_faq_number_question($message)) {
+    $num = (int)$message;
+    $reply = ms_get_faq_by_number($num);
+    if ($reply === null) {
+        $reply = "Invalid FAQ number. Type 'faq' to see the list of questions.";
+    }
+    $_SESSION['chat_history'][] = ['role' => 'user', 'content' => $message];
+    $_SESSION['chat_history'][] = ['role' => 'assistant', 'content' => $reply];
+    $_SESSION['chat_history'] = array_slice($_SESSION['chat_history'], -24);
+    echo json_encode(['reply' => $reply]);
+    exit;
+}
+
+// FAQ question match (e.g., clicking/typing the actual question)
+$faqMatch = ms_match_faq_question($message);
+if ($faqMatch !== null) {
+    $reply = $faqMatch;
+    $_SESSION['chat_history'][] = ['role' => 'user', 'content' => $message];
+    $_SESSION['chat_history'][] = ['role' => 'assistant', 'content' => $reply];
+    $_SESSION['chat_history'] = array_slice($_SESSION['chat_history'], -24);
+    echo json_encode(['reply' => $reply]);
+    exit;
 }
 
 // Deterministic answers for common site questions so details stay accurate.

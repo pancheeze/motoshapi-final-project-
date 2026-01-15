@@ -6,54 +6,66 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once 'config/database.php';
+require_once 'config/connect.php';
 require_once 'config/currency.php';
-require_once 'includes/AuthClient.php';
+require_once 'includes/PizzeriaAPIClient.php';
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email_or_username = trim($_POST['username']);
     $password = $_POST['password'];
 
-    // Use centralized auth service
-    $auth_client = new AuthClient();
-    $response = $auth_client->login($email_or_username, $password);
+    try {
+        // Try local login first
+        $stmt = $conn->prepare('SELECT * FROM users WHERE email = ? OR username = ?');
+        $stmt->execute([$email_or_username, $email_or_username]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($response['status'] === 200 && isset($response['data']['access_token'])) {
-        // Login successful via auth service
-        $_SESSION['user_id'] = $response['data']['user']['id'];
-        $_SESSION['username'] = $response['data']['user']['username'] ?? $response['data']['user']['email'];
-        $_SESSION['email'] = $response['data']['user']['email'];
-        $_SESSION['access_token'] = $response['data']['access_token'];
-        $_SESSION['refresh_token'] = $response['data']['refresh_token'];
-        
-        // Optional: Sync with local database
-        syncLocalUser($response['data']['user']);
-        
-        header('Location: index.php');
-        exit();
-    } else {
-        $error = $response['data']['message'] ?? 'Invalid username/email or password.';
+        if ($user && password_verify($password, $user['password'])) {
+            // Login successful
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['email'] = $user['email'];
+            
+            // Sync user to Pizzeria in background
+            syncUserToPizzeria($user, $password);
+            
+            header('Location: index.php');
+            exit();
+        } else {
+            $error = 'Invalid username/email or password.';
+        }
+    } catch (PDOException $e) {
+        error_log('Login error: ' . $e->getMessage());
+        $error = 'An error occurred. Please try again.';
     }
 }
 
-function syncLocalUser($user) {
-    global $conn;
-    // Sync user from central auth to local database if needed
-    $stmt = $conn->prepare('SELECT id FROM users WHERE email = ?');
-    $stmt->execute([$user['email']]);
-    
-    if (!$stmt->fetch()) {
-        // User doesn't exist locally, create placeholder
-        $stmt = $conn->prepare(
-            'INSERT INTO users (username, password, email, phone) VALUES (?, ?, ?, ?)'
-        );
-        $stmt->execute([
-            $user['username'] ?? $user['email'],
-            password_hash(uniqid(), PASSWORD_BCRYPT), // Dummy password, actual auth via API
-            $user['email'],
-            $user['phone'] ?? null
-        ]);
+function syncUserToPizzeria($user, $password) {
+    try {
+        // Read Pizzeria IP from test file
+        $testFile = __DIR__ . '/test_pizzeria_integration.php';
+        if (file_exists($testFile)) {
+            $content = file_get_contents($testFile);
+            if (preg_match('/\$PIZZERIA_SERVER_IP\s*=\s*[\'"]([^\'"]*)[\'"];/', $content, $matches)) {
+                $pizzeriaIP = $matches[1];
+                if ($pizzeriaIP !== 'localhost' && $pizzeriaIP !== '192.168.1.100') {
+                    $pizzeriaClient = new PizzeriaAPIClient("http://$pizzeriaIP/pizzeria");
+                    
+                    // Sync user data to Pizzeria
+                    $pizzeriaClient->syncUser([
+                        'name' => $user['full_name'] ?? $user['username'],
+                        'email' => $user['email'],
+                        'password' => $password, // Send plain password for Pizzeria to hash
+                        'phone' => $user['phone'] ?? '',
+                        'address' => $user['address'] ?? ''
+                    ]);
+                }
+            }
+        }
+    } catch (Exception $e) {
+        // Sync failed, but don't block login
+        error_log('Pizzeria sync failed: ' . $e->getMessage());
     }
 }
 ?>

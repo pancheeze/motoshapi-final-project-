@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config/database.php';
+require_once 'config/connect.php';
 
 $product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
 $variation_id = isset($_GET['variation_id']) ? intval($_GET['variation_id']) : null;

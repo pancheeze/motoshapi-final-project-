@@ -1,5 +1,5 @@
 <?php
-require_once 'config/database.php';
+require_once 'config/connect.php';
 
 try {
     // Add password reset fields to users table

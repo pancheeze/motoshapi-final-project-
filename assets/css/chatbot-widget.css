@@ -49,6 +49,30 @@
   border-bottom: 1px solid var(--border-primary);
 }
 
+.ms-chatbot-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ms-chatbot-faq {
+  border: 1px solid var(--border-primary);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.ms-chatbot-faq:hover {
+  background: var(--bg-primary);
+  border-color: var(--border-secondary);
+}
+
 .ms-chatbot-title {
   font-weight: 700;
   color: var(--text-primary);
@@ -142,4 +166,64 @@
     right: 0.75rem;
     bottom: 0.75rem;
   }
+}
+
+/* FAQ Buttons */
+.ms-chatbot-faq-container {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.ms-chatbot-faq-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary, #666);
+  margin-bottom: 0.5rem;
+}
+
+.ms-chatbot-faq-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ms-chatbot-faq-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-primary, #111);
+  background: var(--bg-primary, #fff);
+  border: 1px solid var(--border-primary, #ddd);
+  border-radius: var(--radius-md, 6px);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ms-chatbot-faq-btn:hover {
+  background: var(--bg-tertiary, #f5f5f5);
+  border-color: var(--accent-primary, #111);
+  transform: translateX(3px);
+}
+
+.ms-chatbot-faq-btn:active {
+  transform: translateX(1px);
+}
+
+/* Spare theme FAQ overrides */
+.sp-body .ms-chatbot-faq-label {
+  color: #666;
+}
+
+.sp-body .ms-chatbot-faq-btn {
+  background: #fff;
+  border: 1px solid #ddd;
+  color: #111;
+}
+
+.sp-body .ms-chatbot-faq-btn:hover {
+  background: #f3f3f3;
+  border-color: #111;
 }

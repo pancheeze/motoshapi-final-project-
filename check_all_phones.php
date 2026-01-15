@@ -1,5 +1,5 @@
 <?php
-require 'config/database.php';
+require 'config/connect.php';
 
 echo "=== Recent Orders Phone Numbers ===\n\n";
 

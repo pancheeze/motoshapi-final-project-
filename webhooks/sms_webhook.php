@@ -21,7 +21,7 @@
  * }
  */
 
-require_once '../config/database.php';
+require_once '../config/connect.php';
 require_once '../includes/sms_helper.php';
 
 // Set JSON response headers

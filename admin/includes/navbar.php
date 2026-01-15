@@ -8,5 +8,8 @@
                     <a class="nav-link" href="email_dashboard.php">Email</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="network_settings.php">Network API</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="payment_settings.php">Payment Settings</a>
                 </li> 

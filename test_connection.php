@@ -11,7 +11,7 @@ echo "<style>body { font-family: Arial, sans-serif; padding: 20px; } .success { 
 // Test 1: Database Connection
 echo "<h3>1. Database Connection Test</h3>";
 try {
-    require_once 'config/database.php';
+    require_once 'config/connect.php';
     echo "<p class='success'>✓ Database connection successful!</p>";
     echo "<p class='info'>Database: " . DB_NAME . "</p>";
 } catch (Exception $e) {

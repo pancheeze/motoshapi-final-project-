@@ -16,7 +16,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-require_once 'config/database.php';
+require_once 'config/connect.php';
 require_once 'config/currency.php';
 require_once 'config/paypal_config.php';
 require_once 'includes/paypal_helper.php';

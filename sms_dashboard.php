@@ -15,7 +15,7 @@ if (!isset($_SESSION['admin_id']) && !isset($_SESSION['user_id'])) {
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require_once 'config/database.php';
+require_once 'config/connect.php';
 require_once 'config/sms_config.php';
 require_once 'includes/sms_helper.php';
 

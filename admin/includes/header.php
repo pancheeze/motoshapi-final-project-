@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-require_once '../config/database.php';
+require_once '../config/connect.php';
 require_once '../config/currency.php';
 
 $bodyClass = isset($bodyClass) && $bodyClass !== '' ? trim($bodyClass) : 'bg-light';
@@ -21,6 +21,7 @@ $navItems = [
     'admins' => ['label' => 'Admins', 'href' => 'manage_admins.php', 'icon' => 'bi-shield-lock'],
     'sms' => ['label' => 'SMS Dashboard', 'href' => 'sms_dashboard.php', 'icon' => 'bi-chat-dots'],
     'email' => ['label' => 'Email Dashboard', 'href' => 'email_dashboard.php', 'icon' => 'bi-envelope'],
+    'network' => ['label' => 'Network API', 'href' => 'network_settings.php', 'icon' => 'bi-hdd-network'],
     'about' => ['label' => 'About Us', 'href' => 'about_us.php', 'icon' => 'bi-info-circle'],
     'payments' => ['label' => 'Payment Settings', 'href' => 'payment_settings.php', 'icon' => 'bi-credit-card'],
 ];

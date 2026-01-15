@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/database.php';
+require_once '../config/connect.php';
 include 'includes/header.php';
 
 // Check if admin is logged in

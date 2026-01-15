@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config/database.php';
+require_once 'config/connect.php';
 require_once 'config/currency.php';
 
 $title = 'Forgot Password - Motoshapi';
@@ -89,8 +89,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); color: var(--success); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-lg);">
                     <?php echo $success; ?>
                 </div>
-            <?php endif; ?>
-
+                <a href="login.php" class="modern-btn modern-btn-primary" style="width: 100%; padding: 0.875rem; font-size: 1.0625rem; text-align: center; display: block; text-decoration: none;">
+                    Back to Login
+                </a>
+            <?php else: ?>
             <form method="POST">
                 <div style="margin-bottom: var(--spacing-lg);">
                     <label for="email" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">Email Address</label>
@@ -98,6 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <button type="submit" class="modern-btn modern-btn-primary" style="width: 100%; padding: 0.875rem; font-size: 1.0625rem;">Send Reset Instructions</button>
             </form>
+            <?php endif; ?>
 
             <div style="text-align: center; margin-top: var(--spacing-xl); padding-top: var(--spacing-lg); border-top: 1px solid var(--border-primary);">
                 <span style="color: var(--text-secondary);">Remember your password? </span>

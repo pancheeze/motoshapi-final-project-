@@ -1,7 +1,8 @@
 <?php
 session_start();
-require_once 'config/database.php';
+require_once 'config/connect.php';
 require_once 'config/currency.php';
+require_once 'includes/PizzeriaAPIClient.php';
 
 // If already logged in, redirect to home
 if (isset($_SESSION['user_id'])) {
@@ -72,6 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $_SESSION['username'] = $username;
                         $_SESSION['email'] = $email;
                         
+                        // Sync user to Pizzeria
+                        syncNewUserToPizzeria($username, $email, $password, $phone);
+                        
                         // Redirect to home page
                         $_SESSION['success'] = 'Registration successful! Welcome to Motoshapi.';
                         header('Location: index.php');
@@ -85,6 +89,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'An error occurred. Please try again later.';
             error_log('Registration error: ' . $e->getMessage());
         }
+    }
+}
+
+function syncNewUserToPizzeria($username, $email, $password, $phone) {
+    try {
+        // Read Pizzeria IP from test file
+        $testFile = __DIR__ . '/test_pizzeria_integration.php';
+        if (file_exists($testFile)) {
+            $content = file_get_contents($testFile);
+            if (preg_match('/\$PIZZERIA_SERVER_IP\s*=\s*[\'"]([^\'"]*)[\'"];/', $content, $matches)) {
+                $pizzeriaIP = $matches[1];
+                if ($pizzeriaIP !== 'localhost' && $pizzeriaIP !== '192.168.1.100') {
+                    $pizzeriaClient = new PizzeriaAPIClient("http://$pizzeriaIP/pizzeria");
+                    
+                    // Sync new user to Pizzeria
+                    $pizzeriaClient->syncUser([
+                        'name' => $username,
+                        'email' => $email,
+                        'password' => $password, // Send plain password for Pizzeria to hash
+                        'phone' => $phone ?? '',
+                        'address' => ''
+                    ]);
+                }
+            }
+        }
+    } catch (Exception $e) {
+        // Sync failed, but don't block registration
+        error_log('Pizzeria sync failed: ' . $e->getMessage());
     }
 }
 

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config/database.php';
+require_once 'config/connect.php';
 require_once 'config/currency.php';
 
 if (!isset($_SESSION['user_id'])) {
