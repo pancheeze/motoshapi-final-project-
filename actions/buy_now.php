@@ -1,8 +1,16 @@
 <?php
 session_start();
-require_once 'config/connect.php';
+require_once dirname(__DIR__) . '/config/connect.php';
 
 $product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
+$scriptDir = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/');
+$baseUrl = $scriptDir;
+if (str_ends_with($baseUrl, '/actions')) {
+    $baseUrl = dirname($baseUrl);
+}
+if ($baseUrl === '' || $baseUrl === '\\') {
+    $baseUrl = '';
+}
 $variation_id = isset($_GET['variation_id']) ? intval($_GET['variation_id']) : null;
 $quantity = isset($_GET['quantity']) ? max(1, intval($_GET['quantity'])) : 1;
 
@@ -35,10 +43,10 @@ if ($product && $item_stock >= $quantity) {
         'variation_id' => $variation_id,
         'variation' => $variation ? $variation['variation'] : null
     ];
-    header('Location: cart.php');
+    header('Location: ' . $baseUrl . '/pages/cart.php');
     exit();
 } else {
     $_SESSION['error'] = 'Product not available or insufficient stock.';
-    header('Location: product.php?id=' . $product_id);
+    header('Location: ' . $baseUrl . '/pages/product.php?id=' . $product_id);
     exit();
 } 

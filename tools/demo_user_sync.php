@@ -5,7 +5,7 @@
  */
 
 session_start();
-require_once 'includes/PizzeriaAPIClient.php';
+require_once '../includes/PizzeriaAPIClient.php';
 
 // Pizzeria server IP (change this to actual IP)
 $PIZZERIA_IP = '10.38.247.140'; // Change to 192.168.1.101 if on different computer
@@ -365,7 +365,7 @@ if ($localUser) {
         
         <div style="text-align: center; margin: 30px 0;">
             <a href="/motoshapi/" class="btn">← Back to Motoshapi</a>
-            <a href="/motoshapi/test_pizzeria_integration.php" class="btn">Test Integration</a>
+            <a href="/motoshapi/tools/test_pizzeria_integration.php" class="btn">Test Integration</a>
             <a href="/motoshapi/docs/MULTI_DEVICE_SETUP.md" class="btn">Setup Guide</a>
         </div>
     </div>

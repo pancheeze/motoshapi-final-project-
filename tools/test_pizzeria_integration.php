@@ -7,7 +7,7 @@
  */
 
 session_start();
-require_once 'includes/PizzeriaAPIClient.php';
+require_once '../includes/PizzeriaAPIClient.php';
 
 // ========================================
 // CONFIGURATION

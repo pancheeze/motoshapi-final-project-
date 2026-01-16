@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once 'config/connect.php';
-require_once 'config/currency.php';
+require_once '../config/connect.php';
+require_once '../config/currency.php';
 
 $product_id_php = isset($_GET['id']) ? $_GET['id'] : null;
 $product_php = null;
@@ -18,7 +18,7 @@ if ($product_id_php) {
     }
 }
 
-include 'includes/header.php';
+include '../includes/header.php';
 
 // Get product ID from URL
 if (!isset($_GET['id'])) {
@@ -271,7 +271,7 @@ $variations = $var_stmt->fetchAll(PDO::FETCH_ASSOC);
                     submitButton.disabled = true;
                     submitButton.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Adding...';
 
-                    fetch('ajax_add_to_cart.php', {
+                    fetch('<?php echo $actionBase; ?>/ajax_add_to_cart.php', {
                         method: 'POST',
                         body: formData
                     })
@@ -334,7 +334,7 @@ $variations = $var_stmt->fetchAll(PDO::FETCH_ASSOC);
                 var form = document.getElementById('product-action-form');
                 var variation = form.variation_id ? form.variation_id.value : '';
                 var quantity = form.quantity.value;
-                var url = 'buy_now.php?product_id=<?php echo $product['id']; ?>';
+                var url = '<?php echo $actionBase; ?>/buy_now.php?product_id=<?php echo $product['id']; ?>';
                 if (variation) url += '&variation_id=' + encodeURIComponent(variation);
                 url += '&quantity=' + encodeURIComponent(quantity);
                 window.location.href = url;
@@ -342,4 +342,4 @@ $variations = $var_stmt->fetchAll(PDO::FETCH_ASSOC);
         });
     </script>
 
-<?php include 'includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>

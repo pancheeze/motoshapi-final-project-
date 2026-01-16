@@ -5,12 +5,12 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
-require_once 'config/connect.php';
-require_once 'config/currency.php';
-require_once 'config/paypal_config.php';
-require_once 'includes/sms_helper.php';
-require_once 'email/vendor/autoload.php';
-require_once 'email/config/email.php';
+require_once '../config/connect.php';
+require_once '../config/currency.php';
+require_once '../config/paypal_config.php';
+require_once '../includes/sms_helper.php';
+require_once '../email/vendor/autoload.php';
+require_once '../email/config/email.php';
 
 // Fetch user data for auto-fill
 $user_data = [];
@@ -272,7 +272,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
 
         // Show success message
         $title = 'Order Placed - Motoshapi';
-        include 'includes/header.php';
+        include '../includes/header.php';
         ?>
         <div class="modern-container" style="padding-top: 4rem; padding-bottom: 4rem;">
             <div class="modern-card" style="max-width: 600px; margin: 0 auto; padding: var(--spacing-2xl); text-align: center;">
@@ -292,7 +292,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
             </div>
         </div>
         <?php
-        include 'includes/footer.php';
+        include '../includes/footer.php';
         exit;
     } catch (Exception $e) {
         $conn->rollBack();
@@ -301,7 +301,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
 }
 
 $title = 'Online Checkout - Motoshapi';
-include 'includes/header.php';
+include '../includes/header.php';
 ?>
 <div class="modern-container modern-section">
     <h2 class="modern-section-title">Secure <span class="modern-accent-text">Checkout</span></h2>
@@ -589,7 +589,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         quantity: buyNow ? quantity : null
                     };
 
-                    const resp = await fetch('paypal_create_order.php', {
+                    const resp = await fetch('<?php echo $actionBase; ?>/paypal_create_order.php', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
@@ -608,7 +608,7 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             onApprove: async function (data) {
                 try {
-                    const resp = await fetch('paypal_capture_order.php', {
+                    const resp = await fetch('<?php echo $actionBase; ?>/paypal_capture_order.php', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -682,4 +682,4 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<?php include 'includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>

@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once 'config/connect.php';
-require_once 'config/currency.php';
+require_once '../config/connect.php';
+require_once '../config/currency.php';
 
 $title = 'My Orders - Motoshapi';
-include 'includes/header.php';
-require_once 'includes/sms_helper.php';
+include '../includes/header.php';
+require_once '../includes/sms_helper.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
@@ -16,8 +16,8 @@ $user_id = $_SESSION['user_id'];
 
 // Handle order received action
 if (isset($_POST['order_received']) && isset($_POST['order_id'])) {
-    require_once 'email/vendor/autoload.php';
-    require_once 'email/config/email.php';
+    require_once '../email/vendor/autoload.php';
+    require_once '../email/config/email.php';
     
     $order_id = intval($_POST['order_id']);
     
@@ -148,4 +148,4 @@ $fixed_shipping_time = '3-5 business days after order date';
             </div>
         </div>
     </div>
-<?php include 'includes/footer.php'; ?> 
+<?php include '../includes/footer.php'; ?>

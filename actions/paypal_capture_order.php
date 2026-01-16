@@ -16,10 +16,10 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-require_once 'config/connect.php';
-require_once 'config/currency.php';
-require_once 'config/paypal_config.php';
-require_once 'includes/paypal_helper.php';
+require_once dirname(__DIR__) . '/config/connect.php';
+require_once dirname(__DIR__) . '/config/currency.php';
+require_once dirname(__DIR__) . '/config/paypal_config.php';
+require_once dirname(__DIR__) . '/includes/paypal_helper.php';
 
 try {
     if (!paypal_is_configured()) {
@@ -314,10 +314,19 @@ try {
     }
     unset($_SESSION['paypal_pending'][$paypalOrderId]);
 
+    $scriptDir = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/');
+    $baseUrl = $scriptDir;
+    if (str_ends_with($baseUrl, '/actions')) {
+        $baseUrl = dirname($baseUrl);
+    }
+    if ($baseUrl === '' || $baseUrl === '\\') {
+        $baseUrl = '';
+    }
+
     json_response([
         'success' => true,
         'order_id' => $order_id,
-        'redirect_url' => 'paypal_success.php?order_id=' . $order_id
+        'redirect_url' => $baseUrl . '/pages/paypal_success.php?order_id=' . $order_id
     ]);
 } catch (Exception $e) {
     if (isset($conn) && $conn->inTransaction()) {

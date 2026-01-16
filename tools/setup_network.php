@@ -12,8 +12,9 @@ function getLocalIP() {
 }
 
 $myIP = getLocalIP();
-$isMotoshapi = file_exists(__DIR__ . '/api/products.php');
-$isPizzeria = file_exists(__DIR__ . '/api/pizzas.php');
+$rootDir = dirname(__DIR__);
+$isMotoshapi = file_exists($rootDir . '/api/products.php');
+$isPizzeria = file_exists($rootDir . '/api/pizzas.php');
 
 ?>
 <!DOCTYPE html>
@@ -166,7 +167,7 @@ $isPizzeria = file_exists(__DIR__ . '/api/pizzas.php');
             <p>On the <strong>other computer</strong> that will run Pizzeria:</p>
             <ol>
                 <li>Start XAMPP (Apache + MySQL)</li>
-                <li>Go to: <code>http://localhost/pizzeria/setup_network.php</code></li>
+                <li>Go to: <code>http://localhost/pizzeria/tools/setup_network.php</code></li>
                 <li>Copy that computer's IP address</li>
                 <li>Come back here to Step 3</li>
             </ol>
@@ -247,7 +248,7 @@ $isPizzeria = file_exists(__DIR__ . '/api/pizzas.php');
         <div class="step">
             <h3>🔙 Step 2: Return to Computer A</h3>
             <p>On Computer A (Motoshapi), go to:</p>
-            <div class="code-box">http://localhost/motoshapi/setup_network.php</div>
+            <div class="code-box">http://localhost/motoshapi/tools/setup_network.php</div>
             <p>Enter <strong>this computer's IP (<?php echo $myIP; ?>)</strong> there.</p>
         </div>
 

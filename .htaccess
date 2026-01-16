@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# If requesting the root, send to pages/index.php
+RewriteRule ^$ pages/index.php [L]
+
+# Route action endpoints
+RewriteRule ^(ajax_add_to_cart|buy_now|paypal_create_order|paypal_capture_order|chatbot|logout)\.php$ actions/$1.php [L]
+
+# Route page endpoints
+RewriteRule ^(index|products|product|cart|checkout|orders|profile|login|register|forgot_password|reset_password|paypal_success|sms_dashboard)\.php$ pages/$1.php [L]
+
+# Route tools/diagnostic endpoints
+RewriteRule ^(check_all_phones|check_recent_order|check_sms_logs|check_user_emails|fix_password|test_connection|test_email_config|test_pizzeria_integration|test_user_sync|demo_user_sync|setup_network|network_info)\.php$ tools/$1.php [L]

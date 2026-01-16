@@ -2,8 +2,8 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-require_once 'config/connect.php';
-require_once 'config/currency.php';
+require_once __DIR__ . '/../config/connect.php';
+require_once __DIR__ . '/../config/currency.php';
 
 $uiTheme = isset($uiTheme) && $uiTheme !== '' ? $uiTheme : 'spare';
 
@@ -20,6 +20,20 @@ if (!empty($_SESSION['cart'])) {
         $cart_count += $item['quantity'] ?? 0;
     }
 }
+$scriptDir = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/');
+$baseUrl = $scriptDir;
+if ($baseUrl === '' || $baseUrl === '\\') {
+    $baseUrl = '';
+}
+if (str_ends_with($baseUrl, '/pages') || str_ends_with($baseUrl, '/actions') || str_ends_with($baseUrl, '/tools')) {
+    $baseUrl = dirname($baseUrl);
+}
+if ($baseUrl === '') {
+    $baseUrl = '';
+}
+$assetBase = $baseUrl . '/assets';
+$uploadBase = $baseUrl . '/uploads';
+$actionBase = $baseUrl . '/actions';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,12 +43,15 @@ if (!empty($_SESSION['cart'])) {
     <title><?php echo $title ?? 'Motoshapi - Motorcycle Parts'; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="assets/css/modern-theme.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/chatbot-widget.css">
+    <link rel="stylesheet" href="<?php echo $assetBase; ?>/css/modern-theme.css">
+    <link rel="stylesheet" href="<?php echo $assetBase; ?>/css/style.css">
+    <link rel="stylesheet" href="<?php echo $assetBase; ?>/css/chatbot-widget.css">
     <?php if ($uiTheme === 'spare'): ?>
-        <link rel="stylesheet" href="assets/css/spare-parts-theme.css">
+        <link rel="stylesheet" href="<?php echo $assetBase; ?>/css/spare-parts-theme.css">
     <?php endif; ?>
+    <script>
+        window.MOTOSHAPI_BASE = "<?php echo $baseUrl; ?>";
+    </script>
 </head>
 <body class="<?php echo htmlspecialchars($bodyClass, ENT_QUOTES); ?>">
     <div class="d-flex flex-column min-vh-100">
@@ -43,7 +60,7 @@ if (!empty($_SESSION['cart'])) {
                 <nav class="navbar navbar-expand-lg sp-navbar">
                     <div class="sp-container container-fluid">
                         <a href="index.php" class="navbar-brand sp-brand">
-                            <img src="uploads/logo/motologo.svg" alt="Motoshapi logo">
+                            <img src="<?php echo $uploadBase; ?>/logo/motologo.svg" alt="Motoshapi logo">
                             <span class="sp-brand-text">motoshapi</span>
                         </a>
 
@@ -108,7 +125,7 @@ if (!empty($_SESSION['cart'])) {
                             <a href="profile.php" class="modern-icon-btn">
                                 <i class="bi bi-person" style="font-size: 1.25rem;"></i>
                             </a>
-                            <a href="logout.php" class="modern-icon-btn" title="Logout">
+                            <a href="<?php echo $actionBase; ?>/logout.php" class="modern-icon-btn" title="Logout">
                                 <i class="bi bi-box-arrow-right" style="font-size: 1.25rem;"></i>
                             </a>
                         <?php else: ?>

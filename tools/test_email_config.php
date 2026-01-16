@@ -1,6 +1,6 @@
 <?php
-require_once 'email/vendor/autoload.php';
-require_once 'email/config/email.php';
+require_once '../email/vendor/autoload.php';
+require_once '../email/config/email.php';
 
 echo "=== Email Configuration Test ===\n\n";
 echo "SMTP Host: " . SMTP_HOST . "\n";

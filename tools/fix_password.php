@@ -1,5 +1,5 @@
 <?php
-require_once 'config/connect.php';
+require_once '../config/connect.php';
 
 // Hash the password properly
 $hashedPassword = password_hash('qwerty', PASSWORD_DEFAULT);

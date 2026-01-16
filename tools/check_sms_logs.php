@@ -1,5 +1,5 @@
 <?php
-require 'config/connect.php';
+require '../config/connect.php';
 
 echo "=== Recent SMS Logs ===\n\n";
 
@@ -23,7 +23,7 @@ if (empty($logs)) {
 }
 
 // Check configuration
-require 'config/sms_config.php';
+require '../config/sms_config.php';
 echo "\n=== SMS Configuration ===\n";
 echo "Gateway URL: " . SMS_GATEWAY_URL . "\n";
 echo "Username: " . SMS_USERNAME . "\n";

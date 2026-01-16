@@ -29,11 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['configure'])) {
         
         // Files to update
         $filesToUpdate = [
-            '../test_pizzeria_integration.php' => [
+            '../tools/test_pizzeria_integration.php' => [
                 'pattern' => '/\$PIZZERIA_SERVER_IP\s*=\s*[\'"][^\'"]*[\'"];/',
                 'replacement' => "\$PIZZERIA_SERVER_IP = '{$pizzeriaIP}';"
             ],
-            '../demo_user_sync.php' => [
+            '../tools/demo_user_sync.php' => [
                 'pattern' => '/\$PIZZERIA_IP\s*=\s*[\'"][^\'"]*[\'"];/',
                 'replacement' => "\$PIZZERIA_IP = '{$pizzeriaIP}';"
             ]
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['configure'])) {
 
 // Get current Pizzeria IP from test file
 $currentPizzeriaIP = 'Not configured';
-$testFile = '../test_pizzeria_integration.php';
+$testFile = '../tools/test_pizzeria_integration.php';
 if (file_exists($testFile)) {
     $content = file_get_contents($testFile);
     if (preg_match('/\$PIZZERIA_SERVER_IP\s*=\s*[\'"]([^\'"]*)[\'"];/', $content, $matches)) {
@@ -248,7 +248,7 @@ include 'includes/header.php';
                         <div class="info-box">
                             <strong>Method 1: Use Setup Page (Recommended)</strong>
                             <div class="code-display">
-                                http://[Computer B IP]/pizzeria/setup_network.php
+                                http://[Computer B IP]/pizzeria/tools/setup_network.php
                             </div>
                             <p>Enter this computer's IP (<code><?php echo $myIP; ?></code>) in the form.</p>
                         </div>
@@ -269,11 +269,11 @@ include 'includes/header.php';
                         </h5>
                         <p>Verify that both systems can communicate:</p>
                         
-                        <a href="../test_pizzeria_integration.php" target="_blank" class="btn btn-success mb-2">
+                        <a href="../tools/test_pizzeria_integration.php" target="_blank" class="btn btn-success mb-2">
                             <i class="fas fa-vial"></i> Test Pizzeria Connection
                         </a>
                         <br>
-                        <a href="../demo_user_sync.php" target="_blank" class="btn btn-info">
+                        <a href="../tools/demo_user_sync.php" target="_blank" class="btn btn-info">
                             <i class="fas fa-sync"></i> Test User Synchronization
                         </a>
                     </div>

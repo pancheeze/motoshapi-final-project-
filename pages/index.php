@@ -1,14 +1,14 @@
 <?php
 session_start();
-require_once 'config/connect.php';
-require_once 'config/currency.php';
+require_once '../config/connect.php';
+require_once '../config/currency.php';
 
 $title = 'Motoshapi - Motorcycle Parts';
 $activePage = 'home';
 $uiTheme = 'spare';
 $bodyClass = 'bg-light sp-landing-idle';
 $mainClass = 'flex-grow-1 p-0';
-include 'includes/header.php';
+include '../includes/header.php';
 ?>
 
 <?php
@@ -54,7 +54,7 @@ if (empty($featuredProducts)) {
 <section class="sp-landing sp-landing--fullscreen" aria-label="Hero">
     <div class="sp-landing-video" aria-hidden="true">
         <video autoplay muted loop playsinline preload="metadata">
-            <source src="uploads/hero/hero.mp4" type="video/mp4">
+            <source src="<?php echo $uploadBase; ?>/hero/hero.mp4" type="video/mp4">
         </video>
     </div>
     <div class="sp-landing-overlay" aria-hidden="true"></div>
@@ -235,4 +235,4 @@ if (empty($featuredProducts)) {
     })();
 </script>
 
-<?php include 'includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>

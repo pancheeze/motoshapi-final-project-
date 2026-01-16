@@ -16,7 +16,7 @@
  */
 
 // SMS Gateway Settings
-define('SMS_GATEWAY_URL', 'http://192.168.100.9:8080'); // Replace with your Android phone's IP and port
+define('SMS_GATEWAY_URL', 'http://10.38.247.190:8080'); // Replace with your Android phone's IP and port
 define('SMS_USERNAME', 'paul'); // Replace with your SMSGate username
 define('SMS_PASSWORD', 'trialLang'); // Replace with your SMSGate password
 

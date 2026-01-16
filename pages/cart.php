@@ -1,10 +1,10 @@
 <?php
 session_start();
-require_once 'config/connect.php';
-require_once 'config/currency.php';
+require_once '../config/connect.php';
+require_once '../config/currency.php';
 
 $title = 'Your Cart - Motoshapi';
-include 'includes/header.php';
+include '../includes/header.php';
 
 // Initialize cart if not set
 if (!isset($_SESSION['cart'])) {
@@ -236,7 +236,7 @@ foreach ($_SESSION['cart'] as $item) {
             </form>
         <?php endif; ?>
     </div>
-<?php include 'includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const quantityInputs = document.querySelectorAll('.quantity-input');

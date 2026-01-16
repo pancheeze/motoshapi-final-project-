@@ -153,3 +153,10 @@
   "receivedStamp":1768488256722,
   "sim":"sim1"
 }
+[2026-01-16 03:50:00] {
+  "from":"123456789",
+  "text":"ang bilis ma deliver",
+  "sentStamp":1768531806071,
+  "receivedStamp":1768531806071,
+  "sim":"sim1"
+}

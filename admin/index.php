@@ -25,7 +25,7 @@ $total_users = $stmt->fetch()['total_users'];
 // Check User Sync Status
 $pizzeriaIP = 'Not configured';
 $syncEnabled = false;
-$testFile = '../test_pizzeria_integration.php';
+$testFile = '../tools/test_pizzeria_integration.php';
 if (file_exists($testFile)) {
     $content = file_get_contents($testFile);
     if (preg_match('/\$PIZZERIA_SERVER_IP\s*=\s*[\'"]([^\'"]*)[\'"];/', $content, $matches)) {

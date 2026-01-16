@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once 'config/connect.php';
-require_once 'config/currency.php';
+require_once '../config/connect.php';
+require_once '../config/currency.php';
 
 $title = 'Products - Motoshapi';
 $activePage = 'products';
-include 'includes/header.php';
+include '../includes/header.php';
 
 // Fetch categories for filter
 $cat_stmt = $conn->query("SELECT * FROM categories ORDER BY name");
@@ -264,7 +264,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 submitButton.disabled = true;
                 submitButton.innerHTML = '<i class="bi bi-hourglass-split"></i>';
 
-                fetch('ajax_add_to_cart.php', {
+                fetch('<?php echo $actionBase; ?>/ajax_add_to_cart.php', {
                     method: 'POST',
                     body: formData
                 })
@@ -332,4 +332,4 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
       });
     </script>
-<?php include 'includes/footer.php'; ?> 
+<?php include '../includes/footer.php'; ?>

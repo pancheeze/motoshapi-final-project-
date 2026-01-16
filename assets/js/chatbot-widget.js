@@ -98,7 +98,9 @@
   }
 
   async function sendToBackend(message) {
-    const res = await fetch('chatbot.php', {
+    const base = (window.MOTOSHAPI_BASE || '').replace(/\/$/, '');
+    const endpoint = (base ? base : '') + '/actions/chatbot.php';
+    const res = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message }),

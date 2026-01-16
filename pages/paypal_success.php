@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once 'config/connect.php';
-require_once 'config/currency.php';
+require_once '../config/connect.php';
+require_once '../config/currency.php';
 
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['error'] = 'You must be logged in.';
@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
 $order_id = isset($_GET['order_id']) ? (int)$_GET['order_id'] : 0;
 
 $title = 'Payment Successful - Motoshapi';
-include 'includes/header.php';
+include '../includes/header.php';
 ?>
 <div class="modern-container" style="padding-top: 4rem; padding-bottom: 4rem;">
     <div class="modern-card" style="max-width: 600px; margin: 0 auto; padding: var(--spacing-2xl); text-align: center;">
@@ -33,4 +33,4 @@ include 'includes/header.php';
         </div>
     </div>
 </div>
-<?php include 'includes/footer.php'; ?>
+<?php include '../includes/footer.php'; ?>

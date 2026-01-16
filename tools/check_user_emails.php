@@ -1,5 +1,5 @@
 <?php
-require_once 'config/connect.php';
+require_once '../config/connect.php';
 
 echo "=== Recent Users ===\n\n";
 $stmt = $conn->query('SELECT id, username, email FROM users ORDER BY id DESC LIMIT 5');

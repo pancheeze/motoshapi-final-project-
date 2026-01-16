@@ -143,8 +143,8 @@
             }
 
             // Check if sync functions are active
-            $motoshapiLoginHasSync = file_exists('login.php') && strpos(file_get_contents('login.php'), 'syncUserToPizzeria') !== false;
-            $motoshapiRegisterHasSync = file_exists('register.php') && strpos(file_get_contents('register.php'), 'syncNewUserToPizzeria') !== false;
+            $motoshapiLoginHasSync = file_exists('../pages/login.php') && strpos(file_get_contents('../pages/login.php'), 'syncUserToPizzeria') !== false;
+            $motoshapiRegisterHasSync = file_exists('../pages/register.php') && strpos(file_get_contents('../pages/register.php'), 'syncNewUserToPizzeria') !== false;
             
             $pizzeriaLoginHasSync = file_exists('../pizzeria/login.php') && strpos(file_get_contents('../pizzeria/login.php'), 'syncFromMotoshapi') !== false;
             ?>
@@ -190,7 +190,7 @@
                     <div class="status inactive">⚠️ Configuration Incomplete</div>
                     <?php if (!$pizzeriaConfigured): ?>
                         <p style="color: #dc3545; margin: 10px 0;">
-                            → Configure Pizzeria IP in <a href="admin/network_settings.php">Network Settings</a>
+                            → Configure Pizzeria IP in <a href="../admin/network_settings.php">Network Settings</a>
                         </p>
                     <?php endif; ?>
                 <?php endif; ?>
@@ -210,7 +210,7 @@
 Email: testuser@example.com
 Password: Test123!
                     </div>
-                    <a href="register.php" class="btn" target="_blank">Go to Motoshapi Registration</a>
+                    <a href="../register.php" class="btn" target="_blank">Go to Motoshapi Registration</a>
                 </div>
 
                 <div class="step">
@@ -255,7 +255,7 @@ Password: Pizza123!
                 <div class="step">
                     <h4>Step 2: Login on Motoshapi</h4>
                     <p>Try to login here with Pizzeria credentials:</p>
-                    <a href="login.php" class="btn btn-success" target="_blank">Go to Motoshapi Login</a>
+                    <a href="../login.php" class="btn btn-success" target="_blank">Go to Motoshapi Login</a>
                     <p><strong>Expected Result:</strong> Login works! (if user synced on registration)</p>
                 </div>
             </div>
@@ -332,9 +332,9 @@ Password: Pizza123!
 
         <div class="card">
             <h2>🔧 Quick Actions</h2>
-            <a href="admin/network_settings.php" class="btn">⚙️ Network Settings</a>
-            <a href="register.php" class="btn btn-success">📝 Test Registration</a>
-            <a href="login.php" class="btn">🔑 Test Login</a>
+            <a href="../admin/network_settings.php" class="btn">⚙️ Network Settings</a>
+            <a href="../register.php" class="btn btn-success">📝 Test Registration</a>
+            <a href="../login.php" class="btn">🔑 Test Login</a>
             <a href="demo_user_sync.php" class="btn">🔄 User Sync Demo</a>
         </div>
     </div>

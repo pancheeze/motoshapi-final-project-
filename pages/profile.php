@@ -1,10 +1,10 @@
 <?php
 session_start();
-require_once 'config/connect.php';
-require_once 'config/currency.php';
+require_once '../config/connect.php';
+require_once '../config/currency.php';
 
 $title = 'Profile - Motoshapi';
-include 'includes/header.php';
+include '../includes/header.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                         </div>
                         <div class="d-flex justify-content-between align-items-center" style="gap: var(--spacing-md);">
                             <button type="submit" name="update_profile" class="modern-btn modern-btn-primary">Update Profile</button>
-                            <a href="logout.php" class="modern-btn" style="background: var(--danger); color: #fff; text-decoration: none;">Logout</a>
+                            <a href="<?php echo $actionBase; ?>/logout.php" class="modern-btn" style="background: var(--danger); color: #fff; text-decoration: none;">Logout</a>
                         </div>
                     </form>
                 </div>
@@ -142,4 +142,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     });
 </script>
 
-<?php include 'includes/footer.php'; ?> 
+<?php include '../includes/footer.php'; ?>

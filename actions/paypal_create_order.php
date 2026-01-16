@@ -16,10 +16,10 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-require_once 'config/connect.php';
-require_once 'config/currency.php';
-require_once 'config/paypal_config.php';
-require_once 'includes/paypal_helper.php';
+require_once dirname(__DIR__) . '/config/connect.php';
+require_once dirname(__DIR__) . '/config/currency.php';
+require_once dirname(__DIR__) . '/config/paypal_config.php';
+require_once dirname(__DIR__) . '/includes/paypal_helper.php';
 
 try {
     if (!paypal_is_configured()) {

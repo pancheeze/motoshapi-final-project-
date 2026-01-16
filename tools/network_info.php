@@ -228,10 +228,10 @@
             </div>
             
             <div class="link-item">
-                <a href="http://<?= $serverIP ?>/motoshapi/test_pizzeria_integration.php" target="_blank">
+                <a href="http://<?= $serverIP ?>/motoshapi/tools/test_pizzeria_integration.php" target="_blank">
                     Pizzeria Integration Test
                 </a>
-                <button onclick="copyToClipboard('http://<?= $serverIP ?>/motoshapi/test_pizzeria_integration.php', this)">Copy</button>
+                <button onclick="copyToClipboard('http://<?= $serverIP ?>/motoshapi/tools/test_pizzeria_integration.php', this)">Copy</button>
             </div>
             
             <h3 style="color: #dc3545; margin: 30px 0 10px 0;">Pizzeria API</h3>

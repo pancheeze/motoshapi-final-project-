@@ -57,6 +57,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         .password-toggle:hover {
             color: #0d6efd;
         }
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-ms-clear {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-light">

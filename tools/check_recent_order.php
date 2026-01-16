@@ -1,5 +1,5 @@
 <?php
-require 'config/connect.php';
+require '../config/connect.php';
 
 echo "=== Most Recent Order ===\n\n";
 
