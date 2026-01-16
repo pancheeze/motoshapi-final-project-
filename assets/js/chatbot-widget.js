@@ -4,19 +4,6 @@
   const STORAGE_KEY = 'ms_chatbot_history_v1';
   const STORAGE_MAX_MESSAGES = 50;
 
-  // FAQ data - matches the PHP FAQ list
-  const FAQ_LIST = [
-    { q: 'How do I place an order?', key: 'place_order' },
-    { q: 'What payment methods do you accept?', key: 'payment' },
-    { q: 'How can I track my order?', key: 'track_order' },
-    { q: 'How do I reset my password?', key: 'reset_password' },
-    { q: 'How do I create an account?', key: 'create_account' },
-    { q: 'What are featured products?', key: 'featured' },
-    { q: 'How do I check product stock?', key: 'check_stock' },
-    { q: 'Do you offer refunds or returns?', key: 'refunds' },
-    { q: 'How long does delivery take?', key: 'delivery' },
-    { q: 'How do I contact support?', key: 'contact' }
-  ];
 
   function $(id) {
     return document.getElementById(id);
@@ -40,32 +27,6 @@
     return bubble;
   }
 
-  function createFaqButtons(messagesEl, onFaqClick) {
-    const container = document.createElement('div');
-    container.className = 'ms-chatbot-faq-container';
-    
-    const label = document.createElement('div');
-    label.className = 'ms-chatbot-faq-label';
-    label.textContent = '📋 Quick Questions:';
-    container.appendChild(label);
-    
-    const grid = document.createElement('div');
-    grid.className = 'ms-chatbot-faq-grid';
-    
-    FAQ_LIST.forEach((faq, index) => {
-      const btn = document.createElement('button');
-      btn.className = 'ms-chatbot-faq-btn';
-      btn.textContent = faq.q;
-      btn.setAttribute('data-faq-index', index + 1);
-      btn.addEventListener('click', () => onFaqClick(faq.q, index + 1));
-      grid.appendChild(btn);
-    });
-    
-    container.appendChild(grid);
-    messagesEl.appendChild(container);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-    return container;
-  }
 
   function loadHistory() {
     try {
@@ -125,12 +86,12 @@
     return data.reply;
   }
 
+
   function init() {
     const root = $('ms-chatbot');
     const toggle = $('ms-chatbot-toggle');
     const panel = $('ms-chatbot-panel');
     const closeBtn = $('ms-chatbot-close');
-    const faqBtn = $('ms-chatbot-faq');
     const form = $('ms-chatbot-form');
     const input = $('ms-chatbot-input');
     const sendBtn = $('ms-chatbot-send');
@@ -140,40 +101,6 @@
 
     let open = false;
     const history = loadHistory();
-    let faqContainer = null;
-
-    async function handleFaqClick(question, index) {
-      // Show user's question
-      appendBubble(messages, 'user', question);
-      pushHistory(history, 'user', question);
-      
-      // Show typing indicator
-      const typing = appendBubble(messages, 'assistant', 'Typing…');
-      
-      try {
-        if (sendBtn) sendBtn.disabled = true;
-        // Send the exact FAQ question text to get the matching answer
-        const reply = await sendToBackend(question);
-        typing.textContent = reply;
-        pushHistory(history, 'assistant', reply);
-      } catch (err) {
-        const msg = 'Sorry — I could not reach the chatbot service.';
-        typing.textContent = msg;
-        pushHistory(history, 'assistant', msg);
-      } finally {
-        if (sendBtn) sendBtn.disabled = false;
-      }
-    }
-
-    function showFaqList() {
-      if (!faqContainer) {
-        faqContainer = createFaqButtons(messages, handleFaqClick);
-      } else {
-        faqContainer.style.display = '';
-        messages.appendChild(faqContainer);
-      }
-      messages.scrollTop = messages.scrollHeight;
-    }
 
     function setOpen(next) {
       open = next;
@@ -188,7 +115,7 @@
               appendBubble(messages, m.role, m.text);
             }
           } else {
-            const greet = 'Hi! 👋 How can I help you today?\n\nTap the FAQ button to see common questions, or type your own.';
+            const greet = 'Hi! 👋 How can I help you today?';
             appendBubble(messages, 'assistant', greet);
             pushHistory(history, 'assistant', greet);
           }
@@ -206,11 +133,6 @@
       });
     }
 
-    if (faqBtn) {
-      faqBtn.addEventListener('click', function () {
-        showFaqList();
-      });
-    }
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && open) {

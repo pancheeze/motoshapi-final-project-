@@ -16,9 +16,9 @@
  */
 
 // SMS Gateway Settings
-define('SMS_GATEWAY_URL', 'http://10.38.247.190:8080'); // Replace with your Android phone's IP and port
-define('SMS_USERNAME', 'paul'); // Replace with your SMSGate username
-define('SMS_PASSWORD', 'trialLang'); // Replace with your SMSGate password
+define('SMS_GATEWAY_URL', getenv('MOTOSHAPI_SMS_GATEWAY_URL') ?: 'http://10.38.247.190:8080'); // Replace with your Android phone's IP and port
+define('SMS_USERNAME', getenv('MOTOSHAPI_SMS_USERNAME') ?: 'paul'); // Replace with your SMSGate username
+define('SMS_PASSWORD', getenv('MOTOSHAPI_SMS_PASSWORD') ?: 'trialLang'); // Replace with your SMSGate password
 
 // SMS Gateway Status
 define('SMS_ENABLED', true); // Set to true when your SMSGate is configured and running

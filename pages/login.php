@@ -26,6 +26,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['email'] = $user['email'];
+
+            // Send login notification email/SMS (non-blocking)
+            try {
+                if (file_exists(dirname(__DIR__) . '/email/vendor/autoload.php') && file_exists(dirname(__DIR__) . '/email/config/email.php')) {
+                    require_once dirname(__DIR__) . '/email/vendor/autoload.php';
+                    require_once dirname(__DIR__) . '/email/config/email.php';
+
+                    $subject = 'Motoshapi Login Alert';
+                    $body = "<p>Hello {$user['username']},</p><p>We detected a successful login to your Motoshapi account.</p><p>If this was not you, please reset your password immediately.</p>";
+                    sendEmail($user['email'], $subject, $body, 'We detected a successful login to your Motoshapi account.');
+                }
+            } catch (Exception $e) {
+                error_log('Login email failed: ' . $e->getMessage());
+            }
+
+            try {
+                if (!empty($user['phone'])) {
+                    require_once dirname(__DIR__) . '/includes/sms_helper.php';
+                    sendSMS($user['phone'], 'Motoshapi: Successful login to your account. If this was not you, reset your password.');
+                }
+            } catch (Exception $e) {
+                error_log('Login SMS failed: ' . $e->getMessage());
+            }
             
             // Sync user to Pizzeria in background
             syncUserToPizzeria($user, $password);

@@ -58,14 +58,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         
                         // Send welcome email (if email system is configured)
                         try {
-                            if (file_exists('email/vendor/autoload.php') && file_exists('email/config/email.php')) {
-                                require_once '../email/vendor/autoload.php';
-                                require_once '../email/config/email.php';
+                            if (file_exists(dirname(__DIR__) . '/email/vendor/autoload.php') && file_exists(dirname(__DIR__) . '/email/config/email.php')) {
+                                require_once dirname(__DIR__) . '/email/vendor/autoload.php';
+                                require_once dirname(__DIR__) . '/email/config/email.php';
                                 sendWelcomeEmail($email, $username);
                             }
                         } catch (Exception $e) {
                             // Email sending failed, but registration succeeded
                             error_log('Welcome email failed: ' . $e->getMessage());
+                        }
+
+                        // Send welcome SMS if phone is provided (non-blocking)
+                        try {
+                            if (!empty($phone)) {
+                                require_once dirname(__DIR__) . '/includes/sms_helper.php';
+                                sendSMS($phone, 'Motoshapi: Welcome! Your account has been created successfully.');
+                            }
+                        } catch (Exception $e) {
+                            error_log('Welcome SMS failed: ' . $e->getMessage());
                         }
                         
                         // Auto login after registration
@@ -204,8 +214,8 @@ include '../includes/header.php';
                 </div>
                 
                 <div style="margin-bottom: var(--spacing-lg);">
-                    <label for="phone" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">Phone Number <span style="color: var(--text-secondary); font-weight: 400;">(Optional)</span></label>
-                    <input type="tel" class="form-control" id="phone" name="phone" value="<?php echo isset($_POST['phone']) ? htmlspecialchars($_POST['phone']) : ''; ?>" placeholder="+63 XXX XXX XXXX" style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%; font-size: 1rem;">
+                    <label for="phone" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 600; color: var(--text-primary);">Phone Number</label>
+                    <input type="tel" inputmode="numeric" pattern="[0-9]*" class="form-control" id="phone" name="phone" value="<?php echo isset($_POST['phone']) ? htmlspecialchars($_POST['phone']) : ''; ?>" placeholder="09XXXXXXXXX" oninput="this.value=this.value.replace(/[^0-9]/g,'');" style="background: var(--bg-primary); border: 1px solid var(--border-primary); color: var(--text-primary); padding: 0.75rem; border-radius: var(--radius-md); width: 100%; font-size: 1rem;">
                 </div>
                 
                 <div style="margin-bottom: var(--spacing-lg);">

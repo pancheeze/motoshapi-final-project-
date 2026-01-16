@@ -85,9 +85,6 @@
             <div class="ms-chatbot-header">
                 <div class="ms-chatbot-title">Motoshapi Assistant</div>
                 <div class="ms-chatbot-header-actions">
-                    <button id="ms-chatbot-faq" class="ms-chatbot-faq" type="button" title="FAQ">
-                        FAQ
-                    </button>
                     <button id="ms-chatbot-close" class="ms-chatbot-close" type="button" title="Close">
                         <i class="bi bi-x-lg"></i>
                     </button>
